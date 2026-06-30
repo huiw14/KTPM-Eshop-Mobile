@@ -1,0 +1,5 @@
+# AI Audit Report
+
+| Name of the AI tool | Date and time | Your prompt | The AI output |
+| :--- | :--- | :--- | :--- |
+| GitHub Copilot | 2026-06-30T00:00:00Z | "Tôi đang kiểm thử tính năng FR-06: Xem chi tiết sản phẩm trên hệ thống EShop. Các tính năng gồm: - Hiển thị đầy đủ: Ảnh lớn, Tên, Giá, Mô tả, Danh mục. - Có ô nhập Số lượng (chỉ nhận số nguyên dương, tối thiểu là 1). - Nút Thêm vào giỏ hàng — sau khi bấm hiển thị phản hồi trực quan (toast notification hoặc badge cập nhật). > Dựa trên kỹ thuật Domain Testing và Boundary Value Analysis, hãy phân tích từng biến thành các vùng hợp lệ (Valid) và không hợp lệ (Invalid). Sau đó, xác định các giá trị biên (Boundary values). > Cuối cùng, sinh ra một bảng Test Case chi tiết bao gồm: Test Case ID, Description, Input Data, Expected Output." | "Phân tích Domain Testing và Boundary Value Analysis cho FR-06 đã được tạo, kèm bảng Test Case chi tiết cho các trường hợp hợp lệ, không hợp lệ và giá trị biên." |
