@@ -178,15 +178,15 @@
 - **Bảng Test Case:**
   | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
   |---|---|---|---|---|---|
-  | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Import thành công, hiển thị báo cáo đúng số dòng thành công | PASS |
+  | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Not executed | Pending |
   | FR-16-DT-02 | Import file có đuôi không phải `.csv` | File `.md` | Từ chối import, hiển thị lỗi định dạng file | Import thành công và hiện nội dung file | FAIL |
-  | FR-16-DT-03 | Import file CSV header sai | Header thiếu `category_id` | Từ chối import, hiển thị lỗi header không hợp lệ | Not executed | Pending |
+  | FR-16-DT-03 | Import file CSV header sai | Header thiếu `category_id` | Từ chối import, hiển thị lỗi header không hợp lệ | Import thành công | FAIL |
   | FR-16-DT-04 | Import dữ liệu có `name` rỗng | Dòng có `name=""` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
   | FR-16-DT-05 | Import dữ liệu có `price` bằng 0 | Dòng có `price=0` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
-  | FR-16-DT-06 | Import dữ liệu có `price` âm | Dòng có `price=-10` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
+  | FR-16-DT-06 | Import dữ liệu có `price` âm | Dòng có `price=-50000` | Từ chối toàn bộ import, báo lỗi dòng này | Import thành công | FAIL |
   | FR-16-DT-07 | Import dữ liệu có trường chứa dấu phẩy được bọc đúng | `description="Áo thun, cotton"` | Import thành công, parser đọc đúng dữ liệu | Not executed | Pending |
   | FR-16-DT-08 | Import dữ liệu có trường chứa dấu phẩy không được bọc | `description=Áo thun, cotton` | Từ chối import hoặc parser sai cấu trúc, báo lỗi | Not executed | Pending |
-  | FR-16-DT-09 | Import có một dòng lỗi và một dòng hợp lệ | 1 dòng hợp lệ + 1 dòng `price=0` | Rollback toàn bộ, không insert dòng nào | Not executed | Pending |
+  | FR-16-DT-09 | Import có một dòng lỗi và một dòng hợp lệ | 1 dòng hợp lệ + 1 dòng `price=0` | Rollback toàn bộ, không insert dòng nào | Import thành công | FAIL |
   | FR-16-DT-10 | Import thành công hiển thị báo cáo | File CSV có 3 dòng hợp lệ | Hiển thị `3 success, 0 error` và thông tin rõ ràng | Not executed | Pending |
 
 ### 3.2. Boundary Value Analysis
@@ -222,9 +222,13 @@
 * **Lỗi Validation (Bỏ sót kiểm tra Price):** Đặc tả yêu cầu `price` phải là số dương, Copilot đưa ra các test case chặn `price` âm hoặc bằng `0`. Nhưng thực tế trong mã nguồn backend không hề có đoạn code nào kiểm tra điều kiện của `row.price`, dẫn đến việc hệ thống vẫn lưu thành công giá trị giá tiền âm vào cơ sở dữ liệu.
 * **Sai lệch về luồng dữ liệu (CSV vs JSON):** Copilot thiết kế test case tập trung vào việc đọc cấu trúc file `.csv`, header, và dấu phẩy ở tầng API. Tuy nhiên, theo tài liệu API Spec và mã nguồn, API `/api/admin/import-products` không nhận file CSV mà nhận dữ liệu dạng JSON Array (`{ "products": [...] }`). Quá trình parse file CSV thực chất diễn ra ở Frontend, API chỉ xử lý JSON.
 * **Nguyên nhân:** AI một lần nữa chỉ bám vào mô tả bề mặt của SRS để sinh kịch bản lý thuyết mà không đối chiếu chéo (Cross-reference) với tài liệu Đặc tả API (API Spec) và cấu trúc mã nguồn thực tế ở Backend.
-### 3.4. Bug Reporting
-- (Cần cập nhật sau khi kiểm thử)
 
+### 3.4. Bug Reporting
+*Danh sách các lỗi phát hiện khi chạy thực tế trên EShop SUT*.
+- **Bug 8:** FR-08-DT-02 - https://github.com/huiw14/KTPM-Eshop-Mobile/issues/8
+- **Bug 9:** FR-08-DT-03 - https://github.com/huiw14/KTPM-Eshop-Mobile/issues/9
+- **Bug 10:** FR-08-DT-06 - https://github.com/huiw14/KTPM-Eshop-Mobile/issues/10
+- **Bug 11:** FR-08-DT-09 - https://github.com/huiw14/KTPM-Eshop-Mobile/issues/11
 ---
 
 ## Tính năng 4: Mobile FR-012 (Pool D)

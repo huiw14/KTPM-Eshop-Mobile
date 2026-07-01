@@ -28,17 +28,17 @@
   | FR-08-BVA-05 | Kiểm tra biên tổng tiền bằng `0` | Tổng tiền tính được bằng `0` | Không cho phép thanh toán nếu không có sản phẩm hợp lệ | Cho phép thanh toán (xem FR-08-DT-04) | FAIL |
   | FR-08-BVA-06 | Kiểm tra tổng tiền tối thiểu hợp lệ | Tổng tiền tính được bằng `1` | Chấp nhận và tạo đơn hàng nếu dữ liệu khác hợp lệ | Cho phép thanh toán | PASS |
   | FR-08-BVA-07 | Kiểm tra giá trị `total_amount` bị chỉnh sửa bởi client | `total_amount` gửi lên khác với giá trị backend tính | Backend ghi đè bằng giá trị tính lại từ giỏ hàng | Backend chấp nhận giá trị gửi từ client (xem FR-08-DT-04) | FAIL |
-    | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Not executed | Pending |
-  | FR-16-DT-02 | Import file có đuôi không phải `.csv` | File `.xls` | Từ chối import, hiển thị lỗi định dạng file | Not executed | Pending |
-  | FR-16-DT-03 | Import file CSV header sai | Header thiếu `category_id` | Từ chối import, hiển thị lỗi header không hợp lệ | Not executed | Pending |
+  | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Not executed | Pending |
+  | FR-16-DT-02 | Import file có đuôi không phải `.csv` | File `.md` | Từ chối import, hiển thị lỗi định dạng file | Import thành công và hiện nội dung file | FAIL |
+  | FR-16-DT-03 | Import file CSV header sai | Header thiếu `category_id` | Từ chối import, hiển thị lỗi header không hợp lệ | Import thành công | FAIL |
   | FR-16-DT-04 | Import dữ liệu có `name` rỗng | Dòng có `name=""` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
   | FR-16-DT-05 | Import dữ liệu có `price` bằng 0 | Dòng có `price=0` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
-  | FR-16-DT-06 | Import dữ liệu có `price` âm | Dòng có `price=-10` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
+  | FR-16-DT-06 | Import dữ liệu có `price` âm | Dòng có `price=-50000` | Từ chối toàn bộ import, báo lỗi dòng này | Import thành công | FAIL |
   | FR-16-DT-07 | Import dữ liệu có trường chứa dấu phẩy được bọc đúng | `description="Áo thun, cotton"` | Import thành công, parser đọc đúng dữ liệu | Not executed | Pending |
   | FR-16-DT-08 | Import dữ liệu có trường chứa dấu phẩy không được bọc | `description=Áo thun, cotton` | Từ chối import hoặc parser sai cấu trúc, báo lỗi | Not executed | Pending |
-  | FR-16-DT-09 | Import có một dòng lỗi và một dòng hợp lệ | 1 dòng hợp lệ + 1 dòng `price=0` | Rollback toàn bộ, không insert dòng nào | Not executed | Pending |
+  | FR-16-DT-09 | Import có một dòng lỗi và một dòng hợp lệ | 1 dòng hợp lệ + 1 dòng `price=0` | Rollback toàn bộ, không insert dòng nào | Import thành công | FAIL |
   | FR-16-DT-10 | Import thành công hiển thị báo cáo | File CSV có 3 dòng hợp lệ | Hiển thị `3 success, 0 error` và thông tin rõ ràng | Not executed | Pending |
-    | FR-16-BVA-01 | Kiểm tra biên file extension | `product.csv` | Chấp nhận | Not executed | Pending |
+  | FR-16-BVA-01 | Kiểm tra biên file extension | `product.csv` | Chấp nhận | Not executed | Pending |
   | FR-16-BVA-02 | Kiểm tra file extension invalid | `product.xls` | Từ chối | Not executed | Pending |
   | FR-16-BVA-03 | Kiểm tra tên rỗng | `name=""` | Báo lỗi, rollback | Not executed | Pending |
   | FR-16-BVA-04 | Kiểm tra tên tối thiểu hợp lệ | `name="A"` | Chấp nhận | Not executed | Pending |
