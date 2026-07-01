@@ -70,7 +70,75 @@
 ---
 
 ## Tính năng 2: FR-08 (Checkout - Pool B)
-*(Lặp lại cấu trúc 4 phần: 2.1 Domain Testing, 2.2 Boundary Value Analysis, 2.3 AI Gap Analysis, 2.4 Bug Reporting giống FR-06 ở trên)*
+
+### 2.1. Domain Testing
+- **Xác định các biến đầu vào:**
+  - Trạng thái đăng nhập của người dùng
+  - Danh sách sản phẩm trong giỏ hàng
+  - Giá trị tổng tiền thanh toán
+  - Hành động thanh toán
+  - Kết quả sau thanh toán (giỏ hàng có bị xóa hay không)
+
+- **Phân tích miền giá trị (Valid/Invalid):**
+  - Trạng thái đăng nhập:
+    - Valid: người dùng đã đăng nhập
+    - Invalid: chưa đăng nhập / là khách vãng lai
+  - Giỏ hàng:
+    - Valid: có ít nhất 1 sản phẩm trong giỏ hàng, có đủ thông tin sản phẩm
+    - Invalid: giỏ hàng rỗng, thiếu sản phẩm, dữ liệu sản phẩm không hợp lệ
+  - Tổng tiền:
+    - Valid: hệ thống tự tính lại từ giỏ hàng, giá trị dương và phù hợp với dữ liệu thực tế
+    - Invalid: client gửi `total_amount` sai, bị chỉnh sửa thủ công, hoặc bằng `0` khi giỏ hàng có sản phẩm
+  - Hành động thanh toán:
+    - Valid: người dùng đã đăng nhập, giỏ hàng hợp lệ, thao tác thanh toán được phép
+    - Invalid: thanh toán khi chưa đăng nhập, giỏ hàng rỗng, hoặc backend từ chối dữ liệu không hợp lệ
+
+- **Bảng Test Case:**
+  | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
+  |---|---|---|---|---|---|
+  | FR-08-DT-01 | Người dùng chưa đăng nhập thực hiện thanh toán | Chưa đăng nhập, có giỏ hàng | Chặn thao tác, chuyển về đăng nhập hoặc hiển thị thông báo chưa đăng nhập | Not executed | Pending |
+  | FR-08-DT-02 | Người dùng đã đăng nhập, giỏ hàng có sản phẩm | Đã đăng nhập, giỏ hàng có 1 sản phẩm | Hiển thị đầy đủ danh sách sản phẩm và tổng tiền tự động tính | Not executed | Pending |
+  | FR-08-DT-03 | Thanh toán với giỏ hàng rỗng | Đã đăng nhập, giỏ hàng không có sản phẩm | Chặn thanh toán, hiển thị thông báo giỏ hàng trống | Not executed | Pending |
+  | FR-08-DT-04 | Client gửi `total_amount` sai so với giỏ hàng | Đã đăng nhập, giỏ hàng có sản phẩm, `total_amount` bị chỉnh sửa | Backend tự tính lại tổng tiền và không chấp nhận giá trị client gửi | Not executed | Pending |
+  | FR-08-DT-05 | Thanh toán thành công | Đã đăng nhập, giỏ hàng hợp lệ, dữ liệu thanh toán đúng | Hiển thị thông báo thành công, giỏ hàng được xóa | Not executed | Pending |
+  | FR-08-DT-06 | Kiểm tra hiển thị danh sách sản phẩm ở màn hình thanh toán | Đã đăng nhập, giỏ hàng có nhiều sản phẩm | Hiển thị đầy đủ tên, số lượng, giá từng sản phẩm và tổng tiền | Not executed | Pending |
+  | FR-08-DT-07 | Kiểm tra phản hồi khi backend từ chối dữ liệu không hợp lệ | Đã đăng nhập, `total_amount` không đúng | Hiển thị lỗi và không tạo đơn hàng | Not executed | Pending |
+
+### 2.2. Boundary Value Analysis
+- **Xác định các điểm biên:**
+  - Trạng thái đăng nhập: chưa đăng nhập (Invalid) và đã đăng nhập (Valid)
+  - Số lượng sản phẩm trong giỏ hàng:
+    - `0` sản phẩm → biên dưới, Invalid
+    - `1` sản phẩm → giá trị tối thiểu hợp lệ, Valid
+    - `2` sản phẩm → giá trị trên biên, Valid
+  - Tổng tiền:
+    - `0` → biên dưới, Invalid trong trường hợp có thanh toán
+    - `1` → giá trị tối thiểu hợp lệ về mặt số học, nhưng phải phù hợp với giỏ hàng
+    - `>1` → giá trị hợp lệ
+  - Giá trị `total_amount` do client gửi:
+    - Giá trị đúng → Valid
+    - Giá trị sai / bị chỉnh sửa → Invalid
+
+- **Bảng Test Case Giá trị biên:**
+  | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
+  |---|---|---|---|---|---|
+  | FR-08-BVA-01 | Kiểm tra biên đăng nhập | Người dùng chưa đăng nhập | Thanh toán bị chặn | Not executed | Pending |
+  | FR-08-BVA-02 | Kiểm tra biên tối thiểu giỏ hàng | Giỏ hàng có `0` sản phẩm | Chặn thanh toán | Not executed | Pending |
+  | FR-08-BVA-03 | Kiểm tra giá trị tối thiểu hợp lệ của giỏ hàng | Giỏ hàng có `1` sản phẩm | Cho phép thanh toán và tính tổng tiền | Not executed | Pending |
+  | FR-08-BVA-04 | Kiểm tra giá trị trên biên của giỏ hàng | Giỏ hàng có `2` sản phẩm | Thanh toán vẫn hợp lệ và hiển thị đầy đủ thông tin | Not executed | Pending |
+  | FR-08-BVA-05 | Kiểm tra biên tổng tiền bằng `0` | Tổng tiền tính được bằng `0` | Không cho phép thanh toán nếu không có sản phẩm hợp lệ | Not executed | Pending |
+  | FR-08-BVA-06 | Kiểm tra tổng tiền tối thiểu hợp lệ | Tổng tiền tính được bằng `1` | Chấp nhận và tạo đơn hàng nếu dữ liệu khác hợp lệ | Not executed | Pending |
+  | FR-08-BVA-07 | Kiểm tra giá trị `total_amount` bị chỉnh sửa bởi client | `total_amount` gửi lên khác với giá trị backend tính | Backend ghi đè bằng giá trị tính lại từ giỏ hàng | Not executed | Pending |
+
+### 2.3. AI Gap Analysis
+* **Lỗi Bảo mật (Trust Client Data):** Copilot kỳ vọng Backend tự tính lại tổng tiền (TC FR-08-DT-04, BVA-07), nhưng trong thực tế server.js hoàn toàn tin tưởng và lưu trực tiếp total_amount từ client gửi lên mà không hề xác minh lại.
+* **Lỗi Giao diện (Editable Total):** Đặc tả cấm người dùng chỉnh sửa tổng tiền, nhưng Copilot không phát hiện ra mã nguồn Checkout.jsx lại sử dụng thẻ `<input type="number" onChange={...}>` cho phép người dùng tự do sửa editableTotal.
+* **Lỗi Logic (Not Clearing Cart):** Copilot kỳ vọng giỏ hàng được xóa sau khi thanh toán thành công, nhưng trong Checkout.jsx, trạng thái success chỉ hiển thị thông báo chứ không hề gọi hàm `clearCart()`.
+* **Nguyên nhân:** AI chỉ bám vào mô tả lý thuyết của SRS để sinh test case mà không thực sự đọc hiểu và phân tích tĩnh (Static Analysis) luồng mã nguồn thực tế nối giữa Frontend và Backend.
+
+### 2.4. Bug Reporting
+
+
 
 ---
 
