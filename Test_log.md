@@ -46,3 +46,23 @@
   | FR-16-BVA-06 | Kiểm tra giá trị price tối thiểu hợp lệ | `price=0.01` | Chấp nhận | Not executed | Pending |
   | FR-16-BVA-07 | Kiểm tra giá trị price âm | `price=-1` | Báo lỗi, rollback | Not executed | Pending |
   | FR-16-BVA-08 | Kiểm tra rollback khi có 1 dòng lỗi | 1 dòng hợp lệ + 1 dòng lỗi | Không có dòng nào được insert | Not executed | Pending |
+  | FR-04-DT-01 | Người dùng chưa đăng nhập cập nhật hồ sơ | Chưa đăng nhập | Chặn thao tác, yêu cầu đăng nhập | Not executed | Pending |
+  | FR-04-DT-02 | Cập nhật họ tên hợp lệ | Họ tên: `Nguyễn Văn A` | Hồ sơ cập nhật thành công | Not executed | Pending |
+  | FR-04-DT-03 | Cập nhật họ tên không hợp lệ | Họ tên: `""` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-04 | Cập nhật số điện thoại hợp lệ | SĐT: `0901234567` | Hồ sơ cập nhật thành công | Not executed | Pending |
+  | FR-04-DT-05 | Cập nhật số điện thoại invalid không bắt đầu bằng 0 | SĐT: `1901234567` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-06 | Cập nhật số điện thoại invalid quá ngắn | SĐT: `09012345` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-07 | Cập nhật số điện thoại invalid quá dài | SĐT: `090123456789` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-08 | Cập nhật địa chỉ hợp lệ | Địa chỉ: `123 Lê Lợi, Q1` | Hồ sơ cập nhật thành công | Not executed | Pending |
+  | FR-04-DT-09 | Cập nhật địa chỉ rỗng | Địa chỉ: `""` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-10 | Cố ý thay đổi email trên giao diện | Email nhập khác giá trị cũ | Email không được thay đổi, giữ nguyên giá trị cũ | Not executed | Pending |
+  | FR-04-DT-11 | Cố tình thay đổi role từ client | Payload gửi `role=admin` | Backend từ chối, role không đổi | Not executed | Pending |
+  | FR-04-BVA-01 | Kiểm tra số điện thoại dưới biên | `09012345` (9 số) | Từ chối | Not executed | Pending |
+  | FR-04-BVA-02 | Kiểm tra số điện thoại tối thiểu hợp lệ | `0901234567` (10 số) | Chấp nhận | Not executed | Pending |
+  | FR-04-BVA-03 | Kiểm tra số điện thoại tối đa hợp lệ | `09012345678` (11 số) | Chấp nhận | Not executed | Pending |
+  | FR-04-BVA-04 | Kiểm tra số điện thoại trên biên | `090123456789` (12 số) | Từ chối | Not executed | Pending |
+  | FR-04-BVA-05 | Kiểm tra số điện thoại không bắt đầu bằng 0 | `1901234567` | Từ chối | Not executed | Pending |
+  | FR-04-BVA-06 | Kiểm tra họ tên rỗng | `""` | Từ chối | Not executed | Pending |
+  | FR-04-BVA-07 | Kiểm tra họ tên có 1 ký tự | `"A"` | Chấp nhận | Not executed | Pending |
+  | FR-04-BVA-08 | Kiểm tra địa chỉ rỗng | `""` | Từ chối | Not executed | Pending |
+  | FR-04-BVA-09 | Kiểm tra địa chỉ có 1 ký tự | `"A"` | Chấp nhận | Not executed | Pending |

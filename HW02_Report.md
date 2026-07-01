@@ -316,4 +316,3 @@
 
 ### 4.4. Bug Reporting
 *Danh sách các lỗi phát hiện khi chạy thực tế trên EShop SUT*.
-- (Cần cập nhật sau khi kiểm thử)
