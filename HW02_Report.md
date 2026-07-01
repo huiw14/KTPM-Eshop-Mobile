@@ -178,8 +178,8 @@
 - **Bảng Test Case:**
   | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
   |---|---|---|---|---|---|
-  | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Not executed | Pending |
-  | FR-16-DT-02 | Import file có đuôi không phải `.csv` | File `.xls` | Từ chối import, hiển thị lỗi định dạng file | Not executed | Pending |
+  | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Import thành công, hiển thị báo cáo đúng số dòng thành công | PASS |
+  | FR-16-DT-02 | Import file có đuôi không phải `.csv` | File `.md` | Từ chối import, hiển thị lỗi định dạng file | Import thành công và hiện nội dung file | FAIL |
   | FR-16-DT-03 | Import file CSV header sai | Header thiếu `category_id` | Từ chối import, hiển thị lỗi header không hợp lệ | Not executed | Pending |
   | FR-16-DT-04 | Import dữ liệu có `name` rỗng | Dòng có `name=""` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
   | FR-16-DT-05 | Import dữ liệu có `price` bằng 0 | Dòng có `price=0` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
@@ -216,7 +216,7 @@
   | FR-16-BVA-06 | Kiểm tra giá trị price tối thiểu hợp lệ | `price=0.01` | Chấp nhận | Not executed | Pending |
   | FR-16-BVA-07 | Kiểm tra giá trị price âm | `price=-1` | Báo lỗi, rollback | Not executed | Pending |
   | FR-16-BVA-08 | Kiểm tra rollback khi có 1 dòng lỗi | 1 dòng hợp lệ + 1 dòng lỗi | Không có dòng nào được insert | Not executed | Pending |
-  
+
 ### 3.3. AI Gap Analysis
 * **Lỗi kiến trúc nghiêm trọng (Thiếu Rollback):** Copilot kỳ vọng hệ thống sẽ rollback (hủy toàn bộ) nếu có 1 dòng lỗi. Tuy nhiên, mã nguồn `server.js` hoàn toàn không sử dụng cơ chế Transaction (`BEGIN/COMMIT/ROLLBACK`); nó dùng vòng lặp `forEach` và hàm `stmt.run()`, chỉ bỏ qua dòng bị lỗi và vẫn tiếp tục insert các dòng hợp lệ khác vào database.
 * **Lỗi Validation (Bỏ sót kiểm tra Price):** Đặc tả yêu cầu `price` phải là số dương, Copilot đưa ra các test case chặn `price` âm hoặc bằng `0`. Nhưng thực tế trong mã nguồn backend không hề có đoạn code nào kiểm tra điều kiện của `row.price`, dẫn đến việc hệ thống vẫn lưu thành công giá trị giá tiền âm vào cơ sở dữ liệu.
