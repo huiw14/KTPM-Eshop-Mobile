@@ -96,14 +96,14 @@
 - **Bảng Test Case:**
   | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
   |---|---|---|---|---|---|
-  | FR-08-DT-01 | Người dùng chưa đăng nhập thực hiện thanh toán | Chưa đăng nhập, có giỏ hàng | Chặn thao tác, chuyển về đăng nhập hoặc hiển thị thông báo chưa đăng nhập | Not executed | Pending |
-  | FR-08-DT-02 | Người dùng đã đăng nhập, giỏ hàng có sản phẩm | Đã đăng nhập, giỏ hàng có 1 sản phẩm | Hiển thị đầy đủ danh sách sản phẩm và tổng tiền tự động tính | Not executed | Pending |
-  | FR-08-DT-03 | Thanh toán với giỏ hàng rỗng | Đã đăng nhập, giỏ hàng không có sản phẩm | Chặn thanh toán, hiển thị thông báo giỏ hàng trống | Not executed | Pending |
-  | FR-08-DT-04 | Client gửi `total_amount` sai so với giỏ hàng | Đã đăng nhập, giỏ hàng có sản phẩm, `total_amount` bị chỉnh sửa | Backend tự tính lại tổng tiền và không chấp nhận giá trị client gửi | Not executed | Pending |
-  | FR-08-DT-05 | Thanh toán thành công | Đã đăng nhập, giỏ hàng hợp lệ, dữ liệu thanh toán đúng | Hiển thị thông báo thành công, giỏ hàng được xóa | Not executed | Pending |
-  | FR-08-DT-06 | Kiểm tra hiển thị danh sách sản phẩm ở màn hình thanh toán | Đã đăng nhập, giỏ hàng có nhiều sản phẩm | Hiển thị đầy đủ tên, số lượng, giá từng sản phẩm và tổng tiền | Not executed | Pending |
-  | FR-08-DT-07 | Kiểm tra phản hồi khi backend từ chối dữ liệu không hợp lệ | Đã đăng nhập, `total_amount` không đúng | Hiển thị lỗi và không tạo đơn hàng | Not executed | Pending |
-
+  | FR-08-DT-01 | Người dùng chưa đăng nhập thực hiện thanh toán | Chưa đăng nhập, có giỏ hàng | Chặn thao tác, chuyển về đăng nhập hoặc hiển thị thông báo chưa đăng nhập | Chặn thao tác, chuyển về đăng nhập | PASS |
+  | FR-08-DT-02 | Người dùng đã đăng nhập, giỏ hàng có sản phẩm | Đã đăng nhập, giỏ hàng có 1 sản phẩm | Hiển thị đầy đủ danh sách sản phẩm và tổng tiền tự động tính | Hiển thị đầy đủ danh sách sản phẩm và tổng tiền tự động tính | PASS |
+  | FR-08-DT-03 | Thanh toán với giỏ hàng rỗng | Đã đăng nhập, giỏ hàng không có sản phẩm | Chặn thanh toán, hiển thị thông báo giỏ hàng trống | Chặn thanh toán, hiển thị thông báo giỏ hàng trống | PASS |
+  | FR-08-DT-04 | Client gửi `total_amount` sai so với giỏ hàng | Đã đăng nhập, giỏ hàng có sản phẩm, `total_amount` bị chỉnh sửa | Backend tự tính lại tổng tiền và không chấp nhận giá trị client gửi | Backend chấp nhận giá trị client gửi | FAIL |
+  | FR-08-DT-05 | Thanh toán thành công | Đã đăng nhập, giỏ hàng hợp lệ, dữ liệu thanh toán đúng | Hiển thị thông báo thành công, giỏ hàng được xóa | Thông báo thanh toán thành công, giỏ hàng không được xóa | FAIL |
+  | FR-08-DT-06 | Kiểm tra hiển thị danh sách sản phẩm ở màn hình thanh toán | Đã đăng nhập, giỏ hàng có nhiều sản phẩm | Hiển thị đầy đủ tên, số lượng, giá từng sản phẩm và tổng tiền | Hiển thị đầy đủ tên, số lượng, giá từng sản phẩm và tổng tiền | PASS |
+  | FR-08-DT-07 | Kiểm tra phản hồi khi backend từ chối dữ liệu không hợp lệ | Đã đăng nhập, `total_amount` không đúng | Hiển thị lỗi và không tạo đơn hàng | Backend chấp nhận giá trị client gửi và chấp nhận thanh toán (xem FR-08-DT-04) | FAIL |
+  
 ### 2.2. Boundary Value Analysis
 - **Xác định các điểm biên:**
   - Trạng thái đăng nhập: chưa đăng nhập (Invalid) và đã đăng nhập (Valid)
