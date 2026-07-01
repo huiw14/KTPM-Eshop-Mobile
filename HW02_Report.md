@@ -103,7 +103,7 @@
   | FR-08-DT-05 | Thanh toán thành công | Đã đăng nhập, giỏ hàng hợp lệ, dữ liệu thanh toán đúng | Hiển thị thông báo thành công, giỏ hàng được xóa | Thông báo thanh toán thành công, giỏ hàng không được xóa | FAIL |
   | FR-08-DT-06 | Kiểm tra hiển thị danh sách sản phẩm ở màn hình thanh toán | Đã đăng nhập, giỏ hàng có nhiều sản phẩm | Hiển thị đầy đủ tên, số lượng, giá từng sản phẩm và tổng tiền | Hiển thị đầy đủ tên, số lượng, giá từng sản phẩm và tổng tiền | PASS |
   | FR-08-DT-07 | Kiểm tra phản hồi khi backend từ chối dữ liệu không hợp lệ | Đã đăng nhập, `total_amount` không đúng | Hiển thị lỗi và không tạo đơn hàng | Backend chấp nhận giá trị client gửi và chấp nhận thanh toán (xem FR-08-DT-04) | FAIL |
-  
+
 ### 2.2. Boundary Value Analysis
 - **Xác định các điểm biên:**
   - Trạng thái đăng nhập: chưa đăng nhập (Invalid) và đã đăng nhập (Valid)
@@ -122,13 +122,13 @@
 - **Bảng Test Case Giá trị biên:**
   | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
   |---|---|---|---|---|---|
-  | FR-08-BVA-01 | Kiểm tra biên đăng nhập | Người dùng chưa đăng nhập | Thanh toán bị chặn | Not executed | Pending |
-  | FR-08-BVA-02 | Kiểm tra biên tối thiểu giỏ hàng | Giỏ hàng có `0` sản phẩm | Chặn thanh toán | Not executed | Pending |
-  | FR-08-BVA-03 | Kiểm tra giá trị tối thiểu hợp lệ của giỏ hàng | Giỏ hàng có `1` sản phẩm | Cho phép thanh toán và tính tổng tiền | Not executed | Pending |
-  | FR-08-BVA-04 | Kiểm tra giá trị trên biên của giỏ hàng | Giỏ hàng có `2` sản phẩm | Thanh toán vẫn hợp lệ và hiển thị đầy đủ thông tin | Not executed | Pending |
-  | FR-08-BVA-05 | Kiểm tra biên tổng tiền bằng `0` | Tổng tiền tính được bằng `0` | Không cho phép thanh toán nếu không có sản phẩm hợp lệ | Not executed | Pending |
-  | FR-08-BVA-06 | Kiểm tra tổng tiền tối thiểu hợp lệ | Tổng tiền tính được bằng `1` | Chấp nhận và tạo đơn hàng nếu dữ liệu khác hợp lệ | Not executed | Pending |
-  | FR-08-BVA-07 | Kiểm tra giá trị `total_amount` bị chỉnh sửa bởi client | `total_amount` gửi lên khác với giá trị backend tính | Backend ghi đè bằng giá trị tính lại từ giỏ hàng | Not executed | Pending |
+  | FR-08-BVA-01 | Kiểm tra biên đăng nhập | Người dùng chưa đăng nhập | Thanh toán bị chặn | Thanh toán bị chặn | PASS |
+  | FR-08-BVA-02 | Kiểm tra biên tối thiểu giỏ hàng | Giỏ hàng có `0` sản phẩm | Chặn thanh toán | Chặn thanh toán | PASS |
+  | FR-08-BVA-03 | Kiểm tra giá trị tối thiểu hợp lệ của giỏ hàng | Giỏ hàng có `1` sản phẩm | Cho phép thanh toán và tính tổng tiền | Cho phép thanh toán và tính tổng tiền | PASS |
+  | FR-08-BVA-04 | Kiểm tra giá trị trên biên của giỏ hàng | Giỏ hàng có `2` sản phẩm | Thanh toán vẫn hợp lệ và hiển thị đầy đủ thông tin | Thanh toán vẫn hợp lệ và hiển thị đầy đủ thông tin | PASS |
+  | FR-08-BVA-05 | Kiểm tra biên tổng tiền bằng `0` | Tổng tiền tính được bằng `0` | Không cho phép thanh toán nếu không có sản phẩm hợp lệ | Cho phép thanh toán (xem FR-08-DT-04) | FAIL |
+  | FR-08-BVA-06 | Kiểm tra tổng tiền tối thiểu hợp lệ | Tổng tiền tính được bằng `1` | Chấp nhận và tạo đơn hàng nếu dữ liệu khác hợp lệ | Cho phép thanh toán | PASS |
+  | FR-08-BVA-07 | Kiểm tra giá trị `total_amount` bị chỉnh sửa bởi client | `total_amount` gửi lên khác với giá trị backend tính | Backend ghi đè bằng giá trị tính lại từ giỏ hàng | Backend chấp nhận giá trị gửi từ client (xem FR-08-DT-04) | FAIL |
 
 ### 2.3. AI Gap Analysis
 * **Lỗi Bảo mật (Trust Client Data):** Copilot kỳ vọng Backend tự tính lại tổng tiền (TC FR-08-DT-04, BVA-07), nhưng trong thực tế server.js hoàn toàn tin tưởng và lưu trực tiếp total_amount từ client gửi lên mà không hề xác minh lại.
@@ -137,8 +137,9 @@
 * **Nguyên nhân:** AI chỉ bám vào mô tả lý thuyết của SRS để sinh test case mà không thực sự đọc hiểu và phân tích tĩnh (Static Analysis) luồng mã nguồn thực tế nối giữa Frontend và Backend.
 
 ### 2.4. Bug Reporting
-
-
+*Danh sách các lỗi phát hiện khi chạy thực tế trên EShop SUT*.
+- **Bug 6:** FR-08-DT-05 - https://github.com/huiw14/KTPM-Eshop-Mobile/issues/6
+- **Bug 7:** FR-08-DT-04 - https://github.com/huiw14/KTPM-Eshop-Mobile/issues/7
 
 ---
 
