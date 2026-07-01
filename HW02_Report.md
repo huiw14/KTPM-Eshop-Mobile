@@ -234,68 +234,85 @@
 ## Tính năng 4: Mobile FR-012 (Pool D)
 
 ### 4.1. Domain Testing
+*Giải thích chi tiết từng bước áp dụng kỹ thuật Domain Testing với sự hỗ trợ của AI*.
+
 - **Xác định các biến đầu vào:**
-  - Hành động người dùng trên mobile
-  - Trạng thái kết nối mạng
-  - Kích thước màn hình thiết bị
-  - Trạng thái ứng dụng (background/foreground)
+  - Trạng thái đăng nhập của người dùng
+  - Họ tên
+  - Số điện thoại
+  - Địa chỉ giao hàng mặc định
+  - Email
+  - Thuộc tính `role`
 
 - **Phân tích miền giá trị (Valid/Invalid):**
-  - Hành động người dùng:
-    - Valid: nhấn, vuốt, xoay màn hình trên thiết bị hỗ trợ
-    - Invalid: hành động không được hỗ trợ, input không hợp lệ
-  - Kết nối mạng:
-    - Valid: kết nối ổn định (WiFi, 3G, 4G, 5G)
-    - Invalid: không có kết nối, kết nối yếu, mất kết nối giữa lúc hoạt động
-  - Kích thước màn hình:
-    - Valid: màn hình từ 4" đến 6.5" (điện thoại thông dụng)
-    - Invalid: màn hình nhỏ hơn 4", lớn hơn 6.5" (ngoài phạm vi hỗ trợ)
-  - Trạng thái ứng dụng:
-    - Valid: ứng dụng đang chạy (foreground)
-    - Invalid: ứng dụng chạy nền hoặc bị tạm dừng
+  - Trạng thái đăng nhập:
+    - Valid: người dùng đã đăng nhập
+    - Invalid: chưa đăng nhập hoặc token không hợp lệ
+  - Họ tên:
+    - Valid: chuỗi có nội dung, không rỗng
+    - Invalid: rỗng, chỉ khoảng trắng
+  - Số điện thoại:
+    - Valid: bắt đầu bằng `0`, dài 10–11 chữ số
+    - Invalid: không bắt đầu bằng `0`, dài < 10 hoặc > 11, có chữ cái, ký tự đặc biệt, rỗng
+  - Địa chỉ:
+    - Valid: chuỗi có nội dung
+    - Invalid: rỗng hoặc không hợp lệ về kiểu dữ liệu
+  - Email:
+    - Valid: email hiện tại của tài khoản, chỉ đọc
+    - Invalid: cố ý thay đổi email trên giao diện
+  - `role`:
+    - Valid: không thay đổi được từ client
+    - Invalid: client gửi giá trị `role` khác hoặc cố gắng nâng quyền
 
 - **Bảng Test Case:**
   | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
   |---|---|---|---|---|---|
-  | FR-012-DT-01 | Kiểm tra hiển thị giao diện trên màn hình 5" | Mở ứng dụng trên điện thoại 5" | Giao diện hiển thị đầy đủ, không bị cắt | - | - |
-  | FR-012-DT-02 | Kiểm tra phản ứng gesture vuốt | Vuốt trái/phải để quay lại | Quay lại màn hình trước | - | - |
-  | FR-012-DT-03 | Kiểm tra tương thích mạng WiFi | Kết nối WiFi ổn định | Tải dữ liệu nhanh, không lỗi | - | - |
-  | FR-012-DT-04 | Kiểm tra khi mất kết nối mạng | Ngắt kết nối internet | Hiển thị thông báo lỗi mạng | - | - |
-  | FR-012-DT-05 | Kiểm tra xoay màn hình | Xoay thiết bị từ dọc sang ngang | Giao diện tự điều chỉnh, không bị bug | - | - |
-  | FR-012-DT-06 | Kiểm tra ứng dụng chạy nền | Chuyển ứng dụng sang background | Dữ liệu được lưu, không bị mất | - | - |
-  | FR-012-DT-07 | Kiểm tra tương thích trên màn hình nhỏ | Mở ứng dụng trên thiết bị < 4" | Giao diện vẫn sử dụng được (có thể bị nén) | - | - |
+  | FR-04-DT-01 | Người dùng chưa đăng nhập cập nhật hồ sơ | Chưa đăng nhập | Chặn thao tác, yêu cầu đăng nhập | Not executed | Pending |
+  | FR-04-DT-02 | Cập nhật họ tên hợp lệ | Họ tên: `Nguyễn Văn A` | Hồ sơ cập nhật thành công | Not executed | Pending |
+  | FR-04-DT-03 | Cập nhật họ tên không hợp lệ | Họ tên: `""` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-04 | Cập nhật số điện thoại hợp lệ | SĐT: `0901234567` | Hồ sơ cập nhật thành công | Not executed | Pending |
+  | FR-04-DT-05 | Cập nhật số điện thoại invalid không bắt đầu bằng 0 | SĐT: `1901234567` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-06 | Cập nhật số điện thoại invalid quá ngắn | SĐT: `09012345` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-07 | Cập nhật số điện thoại invalid quá dài | SĐT: `090123456789` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-08 | Cập nhật địa chỉ hợp lệ | Địa chỉ: `123 Lê Lợi, Q1` | Hồ sơ cập nhật thành công | Not executed | Pending |
+  | FR-04-DT-09 | Cập nhật địa chỉ rỗng | Địa chỉ: `""` | Từ chối, hiển thị lỗi | Not executed | Pending |
+  | FR-04-DT-10 | Cố ý thay đổi email trên giao diện | Email nhập khác giá trị cũ | Email không được thay đổi, giữ nguyên giá trị cũ | Not executed | Pending |
+  | FR-04-DT-11 | Cố tình thay đổi role từ client | Payload gửi `role=admin` | Backend từ chối, role không đổi | Not executed | Pending |
 
 ### 4.2. Boundary Value Analysis
+*Giải thích chi tiết từng bước áp dụng kỹ thuật phân tích giá trị biên*.
+
 - **Xác định các điểm biên:**
-  - Kích thước màn hình:
-    - `3.9"` → dưới giới hạn, Invalid
-    - `4"` → tối thiểu hỗ trợ, Valid
-    - `5"` → thông thường, Valid
-    - `6.5"` → tối đa hỗ trợ, Valid
-    - `6.6"` → vượt giới hạn, Invalid
-  - Tốc độ mạng:
-    - `0 Mbps` → không có kết nối, Invalid
-    - `1 Mbps` → kết nối yếu, hạn chế
-    - `10 Mbps` → kết nối ổn định, Valid
-  - Thời gian timeout:
-    - `0 ms` → timeout ngay, Invalid
-    - `30000 ms` (30s) → timeout hợp lý, Valid
-    - `60000 ms` (60s) → timeout dài, Valid
+  - Số điện thoại:
+    - `0` chữ số → invalid
+    - `9` chữ số → invalid
+    - `10` chữ số → valid
+    - `11` chữ số → valid
+    - `12` chữ số → invalid
+  - Họ tên:
+    - rỗng/space → invalid
+    - có ít nhất 1 ký tự → valid
+  - Địa chỉ:
+    - rỗng → invalid
+    - có ít nhất 1 ký tự → valid
 
 - **Bảng Test Case Giá trị biên:**
   | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
   |---|---|---|---|---|---|
-  | FR-012-BVA-01 | Kiểm tra màn hình dưới giới hạn | Thiết bị 3.9" | Cảnh báo không hỗ trợ hoặc giao diện bị ảnh hưởng | - | - |
-  | FR-012-BVA-02 | Kiểm tra màn hình tối thiểu | Thiết bị 4" | Giao diện hoạt động bình thường | - | - |
-  | FR-012-BVA-03 | Kiểm tra màn hình tối đa | Thiết bị 6.5" | Giao diện hoạt động bình thường | - | - |
-  | FR-012-BVA-04 | Kiểm tra màn hình vượt giới hạn | Thiết bị 6.6" | Cảnh báo không hỗ trợ hoặc điều chỉnh giao diện | - | - |
-  | FR-012-BVA-05 | Kiểm tra timeout tối thiểu | Request timeout 30 giây | Hiển thị lỗi timeout hợp lý | - | - |
-  | FR-012-BVA-06 | Kiểm tra timeout tối đa | Request timeout 60 giây | Ứng dụng không treo, vẫn phản ứng | - | - |
+  | FR-04-BVA-01 | Kiểm tra số điện thoại dưới biên | `09012345` (9 số) | Từ chối | Not executed | Pending |
+  | FR-04-BVA-02 | Kiểm tra số điện thoại tối thiểu hợp lệ | `0901234567` (10 số) | Chấp nhận | Not executed | Pending |
+  | FR-04-BVA-03 | Kiểm tra số điện thoại tối đa hợp lệ | `09012345678` (11 số) | Chấp nhận | Not executed | Pending |
+  | FR-04-BVA-04 | Kiểm tra số điện thoại trên biên | `090123456789` (12 số) | Từ chối | Not executed | Pending |
+  | FR-04-BVA-05 | Kiểm tra số điện thoại không bắt đầu bằng 0 | `1901234567` | Từ chối | Not executed | Pending |
+  | FR-04-BVA-06 | Kiểm tra họ tên rỗng | `""` | Từ chối | Not executed | Pending |
+  | FR-04-BVA-07 | Kiểm tra họ tên có 1 ký tự | `"A"` | Chấp nhận | Not executed | Pending |
+  | FR-04-BVA-08 | Kiểm tra địa chỉ rỗng | `""` | Từ chối | Not executed | Pending |
+  | FR-04-BVA-09 | Kiểm tra địa chỉ có 1 ký tự | `"A"` | Chấp nhận | Not executed | Pending |
 
 ### 4.3. AI Gap Analysis
-* **Thiếu kiểm thử Multi-device:** Copilot chưa xem xét tương thích trên các phiên bản Android/iOS khác nhau
-* **Thiếu kiểm thử Performance:** Chưa kiểm tra thời gian tải, tiêu thụ pin, tiêu thụ dữ liệu
-* **Thiếu kiểm thử Offline Mode:** Chưa kiểm tra hành vi khi ứng dụng hoạt động offline hoặc sync lại sau khi có kết nối
+* **Lỗi bảo mật nghiêm trọng (Privilege Escalation):** Copilot kỳ vọng Backend sẽ từ chối nếu client cố tình gửi payload đổi role (TC FR-04-DT-11). Tuy nhiên, phân tích mã nguồn server.js tại API PUT /api/users/me cho thấy Backend cố ý tiếp nhận và cập nhật trực tiếp trường này vào DB (`if (role) { query += ", role = ?"; params.push(role); }`). Đây là lỗi leo thang đặc quyền (cho phép user tự biến thành admin).
+* **Niềm tin sai lệch vào Validation:** Copilot thiết kế hàng loạt test case chặn số điện thoại sai định dạng, tên rỗng, địa chỉ rỗng. Nhưng thực tế Backend hoàn toàn không có bất kỳ dòng code nào kiểm tra (validate) các điều kiện này trước khi lưu vào cơ sở dữ liệu.
+* **Nguyên nhân:** AI chỉ bám vào mô tả bề mặt của tài liệu SRS (yêu cầu không cho đổi role, yêu cầu số điện thoại 10-11 số) mà không thực hiện rà soát mã nguồn thực tế ở Backend (Static Analysis), dẫn đến việc bỏ lọt lỗi bảo mật chí mạng.
 
 ### 4.4. Bug Reporting
 *Danh sách các lỗi phát hiện khi chạy thực tế trên EShop SUT*.
