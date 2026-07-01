@@ -144,9 +144,155 @@
 ---
 
 ## Tính năng 3: FR-16 (Product import from CSV - Pool C)
-*(Lặp lại cấu trúc 4 phần tương tự)*
+
+### 3.1. Domain Testing
+- **Xác định các biến đầu vào:**
+  - Loại file upload
+  - Cấu trúc header của file CSV
+  - Nội dung từng dòng dữ liệu
+  - Trường `name`
+  - Trường `price`
+  - Trường `description`, `imageUrl`, `category_id`
+  - Hành vi import và rollback
+
+- **Phân tích miền giá trị (Valid/Invalid):**
+  - File:
+    - Valid: file có đuôi `.csv`
+    - Invalid: file không có đuôi `.csv`, file rỗng, file bị hỏng
+  - Header:
+    - Valid: đúng header `name,price,description,imageUrl,category_id`
+    - Invalid: thiếu cột, sai tên cột, sai thứ tự cột
+  - Dữ liệu dòng:
+    - Valid: các trường đúng định dạng, có dấu phẩy được bọc trong ngoặc kép
+    - Invalid: trường chứa dấu phẩy không được bọc, dữ liệu thiếu cột
+  - `name`:
+    - Valid: không rỗng
+    - Invalid: rỗng hoặc chỉ khoảng trắng
+  - `price`:
+    - Valid: số dương
+    - Invalid: `0`, số âm, chữ, rỗng
+  - Import transaction:
+    - Valid: tất cả dòng hợp lệ → insert thành công
+    - Invalid: có ít nhất 1 dòng lỗi → rollback toàn bộ
+
+- **Bảng Test Case:**
+  | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
+  |---|---|---|---|---|---|
+  | FR-16-DT-01 | Import file CSV hợp lệ với đầy đủ header và dữ liệu đúng | File `.csv` đúng header và 2 dòng dữ liệu hợp lệ | Import thành công, hiển thị báo cáo đúng số dòng thành công | Not executed | Pending |
+  | FR-16-DT-02 | Import file có đuôi không phải `.csv` | File `.xls` | Từ chối import, hiển thị lỗi định dạng file | Not executed | Pending |
+  | FR-16-DT-03 | Import file CSV header sai | Header thiếu `category_id` | Từ chối import, hiển thị lỗi header không hợp lệ | Not executed | Pending |
+  | FR-16-DT-04 | Import dữ liệu có `name` rỗng | Dòng có `name=""` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
+  | FR-16-DT-05 | Import dữ liệu có `price` bằng 0 | Dòng có `price=0` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
+  | FR-16-DT-06 | Import dữ liệu có `price` âm | Dòng có `price=-10` | Từ chối toàn bộ import, báo lỗi dòng này | Not executed | Pending |
+  | FR-16-DT-07 | Import dữ liệu có trường chứa dấu phẩy được bọc đúng | `description="Áo thun, cotton"` | Import thành công, parser đọc đúng dữ liệu | Not executed | Pending |
+  | FR-16-DT-08 | Import dữ liệu có trường chứa dấu phẩy không được bọc | `description=Áo thun, cotton` | Từ chối import hoặc parser sai cấu trúc, báo lỗi | Not executed | Pending |
+  | FR-16-DT-09 | Import có một dòng lỗi và một dòng hợp lệ | 1 dòng hợp lệ + 1 dòng `price=0` | Rollback toàn bộ, không insert dòng nào | Not executed | Pending |
+  | FR-16-DT-10 | Import thành công hiển thị báo cáo | File CSV có 3 dòng hợp lệ | Hiển thị `3 success, 0 error` và thông tin rõ ràng | Not executed | Pending |
+
+### 3.2. Boundary Value Analysis
+- **Xác định các điểm biên:**
+  - File extension:
+    - `file.csv` → biên hợp lệ
+    - `file.xls` / `file.csv.exe` → invalid
+  - `name`:
+    - `""` → giá trị ngay dưới biên, invalid
+    - `"A"` → giá trị tối thiểu hợp lệ, valid
+  - `price`:
+    - `0` → giá trị ngay dưới biên, invalid
+    - `0.01` hoặc `1` → giá trị tối thiểu hợp lệ, valid
+    - `-1` → invalid
+  - Transaction rollback:
+    - Tất cả dòng hợp lệ → valid
+    - Có 1 dòng lỗi → biên chuyển đổi, phải rollback toàn bộ
+
+- **Bảng Test Case Giá trị biên:**
+  | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
+  |---|---|---|---|---|---|
+  | FR-16-BVA-01 | Kiểm tra biên file extension | `product.csv` | Chấp nhận | Not executed | Pending |
+  | FR-16-BVA-02 | Kiểm tra file extension invalid | `product.xls` | Từ chối | Not executed | Pending |
+  | FR-16-BVA-03 | Kiểm tra tên rỗng | `name=""` | Báo lỗi, rollback | Not executed | Pending |
+  | FR-16-BVA-04 | Kiểm tra tên tối thiểu hợp lệ | `name="A"` | Chấp nhận | Not executed | Pending |
+  | FR-16-BVA-05 | Kiểm tra giá trị price dưới biên | `price=0` | Báo lỗi, rollback | Not executed | Pending |
+  | FR-16-BVA-06 | Kiểm tra giá trị price tối thiểu hợp lệ | `price=0.01` | Chấp nhận | Not executed | Pending |
+  | FR-16-BVA-07 | Kiểm tra giá trị price âm | `price=-1` | Báo lỗi, rollback | Not executed | Pending |
+  | FR-16-BVA-08 | Kiểm tra rollback khi có 1 dòng lỗi | 1 dòng hợp lệ + 1 dòng lỗi | Không có dòng nào được insert | Not executed | Pending |
+  
+### 3.3. AI Gap Analysis
+* **Lỗi kiến trúc nghiêm trọng (Thiếu Rollback):** Copilot kỳ vọng hệ thống sẽ rollback (hủy toàn bộ) nếu có 1 dòng lỗi. Tuy nhiên, mã nguồn `server.js` hoàn toàn không sử dụng cơ chế Transaction (`BEGIN/COMMIT/ROLLBACK`); nó dùng vòng lặp `forEach` và hàm `stmt.run()`, chỉ bỏ qua dòng bị lỗi và vẫn tiếp tục insert các dòng hợp lệ khác vào database.
+* **Lỗi Validation (Bỏ sót kiểm tra Price):** Đặc tả yêu cầu `price` phải là số dương, Copilot đưa ra các test case chặn `price` âm hoặc bằng `0`. Nhưng thực tế trong mã nguồn backend không hề có đoạn code nào kiểm tra điều kiện của `row.price`, dẫn đến việc hệ thống vẫn lưu thành công giá trị giá tiền âm vào cơ sở dữ liệu.
+* **Sai lệch về luồng dữ liệu (CSV vs JSON):** Copilot thiết kế test case tập trung vào việc đọc cấu trúc file `.csv`, header, và dấu phẩy ở tầng API. Tuy nhiên, theo tài liệu API Spec và mã nguồn, API `/api/admin/import-products` không nhận file CSV mà nhận dữ liệu dạng JSON Array (`{ "products": [...] }`). Quá trình parse file CSV thực chất diễn ra ở Frontend, API chỉ xử lý JSON.
+* **Nguyên nhân:** AI một lần nữa chỉ bám vào mô tả bề mặt của SRS để sinh kịch bản lý thuyết mà không đối chiếu chéo (Cross-reference) với tài liệu Đặc tả API (API Spec) và cấu trúc mã nguồn thực tế ở Backend.
+### 3.4. Bug Reporting
+- (Cần cập nhật sau khi kiểm thử)
 
 ---
 
 ## Tính năng 4: Mobile FR-012 (Pool D)
-*(Lặp lại cấu trúc 4 phần tương tự)*
+
+### 4.1. Domain Testing
+- **Xác định các biến đầu vào:**
+  - Hành động người dùng trên mobile
+  - Trạng thái kết nối mạng
+  - Kích thước màn hình thiết bị
+  - Trạng thái ứng dụng (background/foreground)
+
+- **Phân tích miền giá trị (Valid/Invalid):**
+  - Hành động người dùng:
+    - Valid: nhấn, vuốt, xoay màn hình trên thiết bị hỗ trợ
+    - Invalid: hành động không được hỗ trợ, input không hợp lệ
+  - Kết nối mạng:
+    - Valid: kết nối ổn định (WiFi, 3G, 4G, 5G)
+    - Invalid: không có kết nối, kết nối yếu, mất kết nối giữa lúc hoạt động
+  - Kích thước màn hình:
+    - Valid: màn hình từ 4" đến 6.5" (điện thoại thông dụng)
+    - Invalid: màn hình nhỏ hơn 4", lớn hơn 6.5" (ngoài phạm vi hỗ trợ)
+  - Trạng thái ứng dụng:
+    - Valid: ứng dụng đang chạy (foreground)
+    - Invalid: ứng dụng chạy nền hoặc bị tạm dừng
+
+- **Bảng Test Case:**
+  | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
+  |---|---|---|---|---|---|
+  | FR-012-DT-01 | Kiểm tra hiển thị giao diện trên màn hình 5" | Mở ứng dụng trên điện thoại 5" | Giao diện hiển thị đầy đủ, không bị cắt | - | - |
+  | FR-012-DT-02 | Kiểm tra phản ứng gesture vuốt | Vuốt trái/phải để quay lại | Quay lại màn hình trước | - | - |
+  | FR-012-DT-03 | Kiểm tra tương thích mạng WiFi | Kết nối WiFi ổn định | Tải dữ liệu nhanh, không lỗi | - | - |
+  | FR-012-DT-04 | Kiểm tra khi mất kết nối mạng | Ngắt kết nối internet | Hiển thị thông báo lỗi mạng | - | - |
+  | FR-012-DT-05 | Kiểm tra xoay màn hình | Xoay thiết bị từ dọc sang ngang | Giao diện tự điều chỉnh, không bị bug | - | - |
+  | FR-012-DT-06 | Kiểm tra ứng dụng chạy nền | Chuyển ứng dụng sang background | Dữ liệu được lưu, không bị mất | - | - |
+  | FR-012-DT-07 | Kiểm tra tương thích trên màn hình nhỏ | Mở ứng dụng trên thiết bị < 4" | Giao diện vẫn sử dụng được (có thể bị nén) | - | - |
+
+### 4.2. Boundary Value Analysis
+- **Xác định các điểm biên:**
+  - Kích thước màn hình:
+    - `3.9"` → dưới giới hạn, Invalid
+    - `4"` → tối thiểu hỗ trợ, Valid
+    - `5"` → thông thường, Valid
+    - `6.5"` → tối đa hỗ trợ, Valid
+    - `6.6"` → vượt giới hạn, Invalid
+  - Tốc độ mạng:
+    - `0 Mbps` → không có kết nối, Invalid
+    - `1 Mbps` → kết nối yếu, hạn chế
+    - `10 Mbps` → kết nối ổn định, Valid
+  - Thời gian timeout:
+    - `0 ms` → timeout ngay, Invalid
+    - `30000 ms` (30s) → timeout hợp lý, Valid
+    - `60000 ms` (60s) → timeout dài, Valid
+
+- **Bảng Test Case Giá trị biên:**
+  | TC ID | Description | Input Data | Expected Output | Actual Result | Status |
+  |---|---|---|---|---|---|
+  | FR-012-BVA-01 | Kiểm tra màn hình dưới giới hạn | Thiết bị 3.9" | Cảnh báo không hỗ trợ hoặc giao diện bị ảnh hưởng | - | - |
+  | FR-012-BVA-02 | Kiểm tra màn hình tối thiểu | Thiết bị 4" | Giao diện hoạt động bình thường | - | - |
+  | FR-012-BVA-03 | Kiểm tra màn hình tối đa | Thiết bị 6.5" | Giao diện hoạt động bình thường | - | - |
+  | FR-012-BVA-04 | Kiểm tra màn hình vượt giới hạn | Thiết bị 6.6" | Cảnh báo không hỗ trợ hoặc điều chỉnh giao diện | - | - |
+  | FR-012-BVA-05 | Kiểm tra timeout tối thiểu | Request timeout 30 giây | Hiển thị lỗi timeout hợp lý | - | - |
+  | FR-012-BVA-06 | Kiểm tra timeout tối đa | Request timeout 60 giây | Ứng dụng không treo, vẫn phản ứng | - | - |
+
+### 4.3. AI Gap Analysis
+* **Thiếu kiểm thử Multi-device:** Copilot chưa xem xét tương thích trên các phiên bản Android/iOS khác nhau
+* **Thiếu kiểm thử Performance:** Chưa kiểm tra thời gian tải, tiêu thụ pin, tiêu thụ dữ liệu
+* **Thiếu kiểm thử Offline Mode:** Chưa kiểm tra hành vi khi ứng dụng hoạt động offline hoặc sync lại sau khi có kết nối
+
+### 4.4. Bug Reporting
+*Danh sách các lỗi phát hiện khi chạy thực tế trên EShop SUT*.
+- (Cần cập nhật sau khi kiểm thử)
