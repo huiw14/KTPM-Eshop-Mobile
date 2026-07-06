@@ -246,16 +246,16 @@
 
 ## 6. Bug Reporting
 
-| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
-| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
-| **BUG-01** | **MAJOR** |  **FR-04-TC-01** | Cập nhật Họ Tên hợp lệ | `Full Name = "Trần Thị B"`, `Phone = ""`, `Address = ""` | Success: "Cập nhật thành công", Họ Tên = "Trần Thị B" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
-| **BUG-02** | **CRITICAL** | **FR-04-TC-03** | Họ Tên chứa XSS payload | `Full Name = "<script>alert(1)</script>"` | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống lưu thành công | **FAIL** |
-| **BUG-03** | **MEDIUM** | **FR-04-TC-04** | Họ Tên quá dài (max+1, 256 ký tự) | `Full Name = [256 ký tự]` | Error: "Họ Tên quá dài" | Hệ thống lưu thành công toàn bộ chuỗi 256 ký tự | **FAIL** |
-| **BUG-04** | **MAJOR** | **FR-04-TC-07** | Phone 10 chữ số, bắt đầu "0" (min hợp lệ) | `Phone = "0987654321"` | Success: "Cập nhật thành công", Phone = "0987654321" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
-| **BUG-05** | **MAJOR** | **FR-04-TC-08** | Phone 11 chữ số, bắt đầu "0" (max hợp lệ) | `Phone = "09876543210"` | Success: "Cập nhật thành công", Phone = "09876543210" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
-| **BUG-06** | **MAJOR** | **FR-04-TC-09** | Phone để trống (optional, min-1 nhưng Valid) | `Phone = ""` | Success: "Cập nhật thành công", Phone = NULL/empty | Hệ thống không chấp nhận để trống trường số điện thoại | **FAIL** |
-| **BUG-07** | **MEDIUM** | **FR-04-TC-10** | Phone không bắt đầu "0" (format error) | `Phone = "1987654321"` | Error: "Số điện thoại phải bắt đầu bằng 0" | Hệ thống báo cập nhật thành công | **FAIL** |
-| **BUG-08** | **CRITICAL** | **FR-04-TC-17** | Address chứa XSS payload | `Full Name = "Nguyễn Văn M"`, `Address = "<img src=x onerror=alert(1)>"` | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống chấp nhận bỏ trống trường địa chỉ chưa mã độc được mã hóa ký tự entities, không kích hoạt alert | **FAIL** |
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- | :--- |
+| BUG-01 | MAJOR | FR-04-TC-01 | Cập nhật Họ Tên hợp lệ | Full Name = "Trần Thị B", Phone = "", Address = "" | Success: "Cập nhật thành công", Họ Tên = "Trần Thị B" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | FAIL |
+| BUG-02 | CRITICAL | FR-04-TC-03 | Họ Tên chứa XSS payload | Full Name = "<script>alert(1)</script>" | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống lưu thành công | FAIL |
+| BUG-03 | MEDIUM | FR-04-TC-04 | Họ Tên quá dài (max+1, 256 ký tự) | Full Name = [256 ký tự] | Error: "Họ Tên quá dài" | Hệ thống lưu thành công toàn bộ chuỗi 256 ký tự | FAIL |
+| BUG-04 | MAJOR | FR-04-TC-07 | Phone 10 chữ số, bắt đầu "0" (min hợp lệ) | Phone = "0987654321" | Success: "Cập nhật thành công", Phone = "0987654321" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | FAIL |
+| BUG-05 | MAJOR | FR-04-TC-08 | Phone 11 chữ số, bắt đầu "0" (max hợp lệ) | Phone = "09876543210" | Success: "Cập nhật thành công", Phone = "09876543210" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | FAIL |
+| BUG-06 | MAJOR | FR-04-TC-09 | Phone để trống (optional, min-1 nhưng Valid) | Phone = "" | Success: "Cập nhật thành công", Phone = NULL/empty | Hệ thống không chấp nhận để trống trường số điện thoại | FAIL |
+| BUG-07 | MEDIUM | FR-04-TC-10 | Phone không bắt đầu "0" (format error) | Phone = "1987654321" | Error: "Số điện thoại phải bắt đầu bằng 0" | Hệ thống báo cập nhật thành công | FAIL |
+| BUG-08 | CRITICAL | FR-04-TC-17 | Address chứa XSS payload | Full Name = "Nguyễn Văn M", Address = "<img src=x onerror=alert(1)>" | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống chấp nhận bỏ trống trường địa chỉ chưa mã độc được mã hóa ký tự entities, không kích hoạt alert | FAIL |
 
 
 ---
@@ -454,15 +454,15 @@
 
 ## 6. Bug Reporting
 
-| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
-| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
-| **BUG-01** | **MAJOR** | **FR-07-TC-01** | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) từ trang 'Xem chi tiết' | `Product_A`, `Qty=1`, `Price=50.000₫` | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] | Hệ thống không hiển thị dòng sản phẩm vừa thêm vào giỏ hàng nếu chỉ nhấp vào nút lệnh 1 lần mà phải nhấp đúp 2 lần liên tục mới thêm vào giỏ | **FAIL** |
-| **BUG-02** | **CRITICAL** | **FR-07-TC-03** | Nhập Qty=0 (biên không hợp lệ, $min-1$) | `Product_C`, `Qty=0` | Lỗi: "Số lượng phải ≥ 1" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 0 | **FAIL** |
-| **BUG-03** | **CRITICAL** | **FR-07-TC-04** | Nhập Qty=-5 (số âm) | `Product_D`, `Qty=-5` | Lỗi: "Số lượng không hợp lệ" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là -5 | **FAIL** |
-| **BUG-04** | **MAJOR** | **FR-07-TC-05** | Nhập Qty=1500 (vượt phạm vi) | `Product_E`, `Qty=1500` | Lỗi: "Vượt giới hạn" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 1500 | **FAIL** |
-| **BUG-05** | **MAJOR** | **FR-07-TC-08** | Thêm Product_A lần 2 (merge Qty, không tạo dòng mới) | Giỏ `[A, Qty=3]`; Thêm `A`, `Qty=2` | Giỏ: [Product_A, Qty=5] (1 dòng, merge thành công) | Tăng số dòng; dòng Product_A cũ không được cộng dồn số lượng lên | **FAIL** |
-| **BUG-06** | **MEDIUM** | **FR-07-TC-12** | Xóa sản phẩm + Xác nhận "Có" | Click Xóa `Product_A` → Dialog → "Có" | Product_A xóa, danh sách cập nhật, Tổng tiền recalc | Dòng sản phẩm biến mất lập tức, không có dialog xác nhận được hiện lên | **FAIL** |
-| **BUG-07** | **MINOR** | **FR-07-TC-18** | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = "Tổng cộng" (chính xác, không phải "Tổng tạm tính") | Giao diện ghi  chữ "Tổng tạm tính" không theo tiêu chuẩn đặc tả | **FAIL** |
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- | :--- |
+| BUG-01 | MAJOR | FR-07-TC-01 | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) từ trang 'Xem chi tiết' | Product_A, Qty=1, Price=50.000₫ | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] | Hệ thống không hiển thị dòng sản phẩm vừa thêm vào giỏ hàng nếu chỉ nhấp vào nút lệnh 1 lần mà phải nhấp đúp 2 lần liên tục mới thêm vào giỏ | FAIL |
+| BUG-02 | CRITICAL | FR-07-TC-03 | Nhập Qty=0 (biên không hợp lệ, min−1) | Product_C, Qty=0 | Lỗi: "Số lượng phải ≥ 1" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 0 | FAIL |
+| BUG-03 | CRITICAL | FR-07-TC-04 | Nhập Qty=-5 (số âm) | Product_D, Qty=-5 | Lỗi: "Số lượng không hợp lệ" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là -5 | FAIL |
+| BUG-04 | MAJOR | FR-07-TC-05 | Nhập Qty=1500 (vượt phạm vi) | Product_E, Qty=1500 | Lỗi: "Vượt giới hạn" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 1500 | FAIL |
+| BUG-05 | MAJOR | FR-07-TC-08 | Thêm Product_A lần 2 (merge Qty, không tạo dòng mới) | Giỏ [A, Qty=3]; Thêm A, Qty=2 | Giỏ: [Product_A, Qty=5] (1 dòng, merge thành công) | Tăng số dòng; dòng Product_A cũ không được cộng dồn số lượng lên | FAIL |
+| BUG-06 | MEDIUM | FR-07-TC-12 | Xóa sản phẩm + Xác nhận "Có" | Click Xóa Product_A → Dialog → "Có" | Product_A xóa, danh sách cập nhật, Tổng tiền recalc | Dòng sản phẩm biến mất lập tức, không có dialog xác nhận được hiện lên | FAIL |
+| BUG-07 | MINOR | FR-07-TC-18 | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = "Tổng cộng" (chính xác, không phải "Tổng tạm tính") | Giao diện ghi chữ "Tổng tạm tính" không theo tiêu chuẩn đặc tả | FAIL |
 
 ---
 
@@ -674,13 +674,13 @@
 
 ## 6. Bug Reporting
 
-| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
-| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
-| **BUG-01** | **MAJOR** | **FR-14-TC-02** | Thêm danh mục với tên để trống (min-1, không hợp lệ) | `Category Name = ""` → Click "Lưu" | Error: "Tên danh mục không được để trống" | Danh mục vẫn được tạo nhưng không có tên và cập nhật real-time lên giao diện danh sách | **FAIL** |
-| **BUG-02** | **CRITICAL** | **FR-14-TC-03** | Thêm danh mục với tên chứa XSS payload | `Category Name = "<script>alert(1)</script>"` | Security Pass: Từ chối hoặc escape, không render HTML | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
-| **BUG-03** | **MEDIUM** | **FR-14-TC-04** | Thêm danh mục với tên quá dài (max+1, 256 ký tự) | `Category Name = [256 ký tự]` | Error: "Tên danh mục quá dài" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
-| **BUG-04** | **MAJOR** | **FR-14-TC-07** | Thêm danh mục với tên chỉ khoảng trắng | `Category Name = "   "` → Click "Lưu" | Error: "Tên danh mục không được để trống" (sau trim) | Danh mục vẫn được tạo nhưng không thấy tên và cập nhật real-time lên giao diện danh sách | **FAIL** |
-| **BUG-05** | **MAJOR** | **FR-14-TC-08** | Thêm danh mục với tên trùng danh mục hiện có | DB: `["Điện tử"]`; Nhập `"Điện tử"` | Error: "Tên danh mục đã tồn tại" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- | :--- |
+| BUG-01 | MAJOR | FR-14-TC-02 | Thêm danh mục với tên để trống (min-1, không hợp lệ) | Category Name = "" → Click "Lưu" | Error: "Tên danh mục không được để trống" | Danh mục vẫn được tạo nhưng không có tên và cập nhật real-time lên giao diện danh sách | FAIL |
+| BUG-02 | CRITICAL | FR-14-TC-03 | Thêm danh mục với tên chứa XSS payload | Category Name = "<script>alert(1)</script>" | Security Pass: Từ chối hoặc escape, không render HTML | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | FAIL |
+| BUG-03 | MEDIUM | FR-14-TC-04 | Thêm danh mục với tên quá dài (max+1, 256 ký tự) | Category Name = [256 ký tự] | Error: "Tên danh mục quá dài" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | FAIL |
+| BUG-04 | MAJOR | FR-14-TC-07 | Thêm danh mục với tên chỉ khoảng trắng | Category Name = "   " → Click "Lưu" | Error: "Tên danh mục không được để trống" (sau trim) | Danh mục vẫn được tạo nhưng không thấy tên và cập nhật real-time lên giao diện danh sách | FAIL |
+| BUG-05 | MAJOR | FR-14-TC-08 | Thêm danh mục với tên trùng danh mục hiện có | DB: ["Điện tử"]; Nhập "Điện tử" | Error: "Tên danh mục đã tồn tại" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | FAIL |
 
 ---
 
@@ -948,16 +948,16 @@
 
 ## 6. Bug Reporting
 
-| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
-| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
-| **BUG-01** | **CRITICAL** | **FR-05-TC-01** | Truy cập trang chủ (không tìm kiếm, keyword min=0) | Không nhập keyword | Hiển thị tất cả sản phẩm dạng grid | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-02** | **MAJOR** | **FR-05-TC-02** | Tìm kiếm sản phẩm với keyword hợp lệ | `Keyword = "Điện thoại"` | Danh sách sản phẩm match "Điện thoại" hiển thị | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-03** | **MAJOR** | **FR-05-TC-03** | Tìm kiếm với XSS payload (security) | `Keyword = "<script>alert(1)</script>"` | Security: Payload escaped, không render HTML | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-04** | **MAJOR** | **FR-05-TC-04** | Tìm kiếm với ký tự đặc biệt | `Keyword = "@#$%^&*"` | Tìm kiếm hoạt động (hoặc không kết quả) | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-05** | **MAJOR** | **FR-05-TC-05** | Tìm kiếm không có kết quả (0 match) | `Keyword = "XYZ không tồn tại 123"` | Empty state: "Không tìm thấy sản phẩm" + Icon | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-06** | **MAJOR** | **FR-05-TC-06** | Tìm kiếm case-insensitive | `Keyword = "ĐIỆN THOẠI"` và `"điện thoại"` | Cả hai match "Điện thoại" (nếu support) | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-07** | **MAJOR** | **FR-05-TC-07** | Tìm kiếm quá dài (max+1=256 ký tự) | `Keyword = [256 ký tự]` | Từ chối, cắt bớt, hoặc không kết quả | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
-| **BUG-08** | **MAJOR** | **FR-05-TC-08** | Tìm kiếm partial match | `Keyword = "điện"` | Match "Điện thoại", "Điều hòa", ... | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- | :--- |
+| BUG-01 | CRITICAL | FR-05-TC-01 | Truy cập trang chủ (không tìm kiếm, keyword min=0) | Không nhập keyword | Hiển thị tất cả sản phẩm dạng grid | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-02 | MAJOR | FR-05-TC-02 | Tìm kiếm sản phẩm với keyword hợp lệ | Keyword = "Điện thoại" | Danh sách sản phẩm match "Điện thoại" hiển thị | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-03 | MAJOR | FR-05-TC-03 | Tìm kiếm với XSS payload (security) | Keyword = "<script>alert(1)</script>" | Security: Payload escaped, không render HTML | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-04 | MAJOR | FR-05-TC-04 | Tìm kiếm với ký tự đặc biệt | Keyword = "@#$%^&*" | Tìm kiếm hoạt động (hoặc không kết quả) | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-05 | MAJOR | FR-05-TC-05 | Tìm kiếm không có kết quả (0 match) | Keyword = "XYZ không tồn tại 123" | Empty state: "Không tìm thấy sản phẩm" + Icon | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-06 | MAJOR | FR-05-TC-06 | Tìm kiếm case-insensitive | Keyword = "ĐIỆN THOẠI" và "điện thoại" | Cả hai match "Điện thoại" (nếu support) | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-07 | MAJOR | FR-05-TC-07 | Tìm kiếm quá dài (max+1=256 ký tự) | Keyword = [256 ký tự] | Từ chối, cắt bớt, hoặc không kết quả | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
+| BUG-08 | MAJOR | FR-05-TC-08 | Tìm kiếm partial match | Keyword = "điện" | Match "Điện thoại", "Điều hòa", ... | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
 
 ---
 
