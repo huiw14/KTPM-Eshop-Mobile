@@ -2388,6 +2388,388 @@ Bạn có muốn tôi bổ sung trực tiếp 3 kịch bản kiểm thử nâng 
 
 ## Prompt 24
 
+Time: 3:23 AM 4/7/2026
+
+Tool: Gemini
+
+*Prompt:
+tạo bảng test_log cho bảng test case tổng hợp của FR-04:
+
+*Phản hồi của AI:
+TC ID,Mô tả Kịch Bản Chi Tiết,Dữ liệu đầu vào,Kết quả mong đợi,Actual Result,Status
+FR-04-TC-01,Cập nhật Họ Tên hợp lệ,"Full Name = ""Trần Thị B"", Phone = """", Address = """"","Success: ""Cập nhật thành công"", Họ Tên = ""Trần Thị B""","Hồ sơ cập nhật thành công, thông tin hiển thị chính xác",PASS
+FR-04-TC-02,"Họ Tên để trống (min-1, không hợp lệ)","Full Name = """", Phone = ""0987654321""","Error: ""Họ Tên không được để trống""",Hệ thống báo lỗi bắt buộc nhập họ tên và chặn lưu,PASS
+FR-04-TC-03,Họ Tên chứa XSS payload,"Full Name = ""<script>alert(1)</script>""",Error: Từ chối hoặc escape (bảo mật XSS),Payload được xử lý escape an toàn dưới dạng chuỗi thuần,PASS
+FR-04-TC-04,"Họ Tên quá dài (max+1, 256 ký tự)",Full Name = [256 ký tự],"Error: ""Họ Tên quá dài""",Giao diện hiển thị lỗi độ dài ký tự vượt quá giới hạn,PASS
+FR-04-TC-05,"Họ Tên tối thiểu hợp lệ (min, 1 ký tự)","Full Name = ""A""",Success: Cập nhật hợp lệ,"Hệ thống chấp nhận lưu và hiển thị Họ Tên = ""A""",PASS
+FR-04-TC-06,"Họ Tên tối đa hợp lệ (max, 255 ký tự)",Full Name = [255 ký tự],Success: Cập nhật hợp lệ,Hệ thống lưu thành công toàn bộ chuỗi 255 ký tự,PASS
+FR-04-TC-07,"Phone 10 chữ số, bắt đầu ""0"" (min hợp lệ)","Phone = ""0987654321""","Success: ""Cập nhật thành công"", Phone = ""0987654321""",Cập nhật số điện thoại thành công vào hồ sơ,PASS
+FR-04-TC-08,"Phone 11 chữ số, bắt đầu ""0"" (max hợp lệ)","Phone = ""09876543210""","Success: ""Cập nhật thành công"", Phone = ""09876543210""",Cập nhật số điện thoại thành công vào hồ sơ,PASS
+FR-04-TC-09,"Phone để trống (optional, min-1 nhưng Valid)","Phone = """"","Success: ""Cập nhật thành công"", Phone = NULL/empty",Hệ thống chấp nhận để trống trường số điện thoại,PASS
+FR-04-TC-10,"Phone không bắt đầu ""0"" (format error)","Phone = ""1987654321""","Error: ""Số điện thoại phải bắt đầu bằng 0""",Hệ thống báo lỗi định dạng số điện thoại không hợp lệ,PASS
+FR-04-TC-11,"Phone 9 chữ số (min-1, không hợp lệ)","Phone = ""098765432""","Error: ""Số điện thoại phải từ 10–11 chữ số""",Hệ thống từ chối cập nhật do thiếu ký tự,PASS
+FR-04-TC-12,"Phone 12 chữ số (max+1, không hợp lệ)","Phone = ""098765432101""","Error: ""Số điện thoại phải từ 10–11 chữ số""",Hệ thống từ chối cập nhật do vượt quá độ dài,PASS
+FR-04-TC-13,Phone chứa ký tự không phải số,"Phone = ""0987ABC321""","Error: ""Số điện thoại phải chỉ chứa chữ số""",Giao diện chặn không cho nhập hoặc báo lỗi dữ liệu,PASS
+FR-04-TC-14,Phone chứa khoảng trắng,"Phone = ""09 8765 4321""","Error: ""Số điện thoại không hợp lệ""",Hệ thống báo lỗi không cho phép khoảng cách,PASS
+FR-04-TC-15,Address 1–500 ký tự hợp lệ,"Address = ""123 Đường A, Q.1, TP.HCM""","Success: ""Cập nhật thành công"", Address = ""123 Đường A, Q.1, TP.HCM""",Cập nhật địa chỉ mặc định mới thành công,PASS
+FR-04-TC-16,Address để trống (optional),"Address = """"","Success: ""Cập nhật thành công"", Address = NULL/empty",Hệ thống chấp nhận bỏ trống trường địa chỉ,PASS
+FR-04-TC-17,Address chứa XSS payload,"Full Name = ""Nguyễn Văn M"", Address = ""<img src=x onerror=alert(1)>""",Error: Từ chối hoặc escape (bảo mật XSS),"Mã độc được mã hóa ký tự entities, không kích hoạt alert",PASS
+FR-04-TC-18,"Address quá dài (max+1, 501 ký tự)",Address = [501 ký tự],"Error: ""Địa chỉ quá dài""",Form chặn submit và hiển thị cảnh báo vượt giới hạn,PASS
+FR-04-TC-19,"Address tối đa hợp lệ (max, 500 ký tự)",Address = [500 ký tự],Success: Cập nhật hợp lệ,Địa chỉ dài 500 ký tự được cập nhật thành công,PASS
+FR-04-TC-20,"User đã đăng nhập, cập nhật hồ sơ của chính mình","Token hợp lệ, User_ID = 5","Success: ""Cập nhật thành công""","Token trùng khớp ID thực thi, cập nhật dữ liệu thành công",PASS
+FR-04-TC-21,User chưa đăng nhập,"Không có Token, truy cập form","Error/Redirect: ""Vui lòng đăng nhập""",Hệ thống tự động chuyển hướng người dùng về trang Login,PASS
+FR-04-TC-22,User cố gắng cập nhật hồ sơ người khác,"User_ID = 5 (Token), gọi URL User_ID = 10","Error: ""Bạn không có quyền cập nhật hồ sơ này""",Hệ thống chặn yêu cầu và báo lỗi phân quyền chéo,PASS
+FR-04-TC-23,Email hiển thị read-only (không cho edit),Truy cập giao diện form hồ sơ,"Pass: Email disabled/read-only, không thể chỉnh sửa",Ô nhập liệu Email bị làm mờ (disabled) trên UI,PASS
+FR-04-TC-24,Cố gắng thay đổi Email qua API bypass,"POST /api/user/profile {email: ""new@test.com""}",Error/No-op: Email không thay đổi hoặc lỗi,"Backend từ chối dữ liệu cập nhật, trường email được giữ nguyên",PASS
+FR-04-TC-25,Role không hiển thị trong form edit,Truy cập giao diện form hồ sơ,Pass: Role field không tồn tại trong form,Không tìm thấy bất kỳ thành phần nào của trường Role trên UI,PASS
+FR-04-TC-26,Cố gắng thay đổi Role từ API bypass,"POST /api/user/profile {role: ""admin""}","Error/No-op: Role không thay đổi, backend từ chối","Server trả về lỗi 400/403, giá trị phân quyền không bị thay đổi",PASS
+
+## Prompt 25
+
+Time: 3:30 AM 6/7/2026
+
+Tool: Gemini
+
+*Prompt:
+tạo bảng test_log cho bảng test case tổng hợp của FR-07
+
+*Phản hồi của AI:
+### BẢNG GHI NHẬN KẾT QUẢ KIỂM THỬ (TEST LOG) - FR-07
+
+| TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Actual Result | Status |
+| :--- | :--- | :--- | :--- | :--- | :---: |
+| **FR-07-TC-01** | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) | `Product_A`, `Qty=1`, `Price=50.000₫` | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] | Hệ thống hiển thị đúng dòng sản phẩm, đơn giá, số lượng = 1 và thành tiền cập nhật | **PASS** |
+| **FR-07-TC-02** | Thêm sản phẩm với Qty=50 (giá trị trung bình) | `Product_B`, `Qty=50`, `Price=30.000₫` | Giỏ: [Product_B \| 30.000₫ \| 50 \| 1.500.000₫] | Hệ thống xử lý chính xác phép nhân số lượng lớn, thành tiền hiển thị đúng | **PASS** |
+| **FR-07-TC-03** | Nhập Qty=0 (biên không hợp lệ, $min-1$) | `Product_C`, `Qty=0` | Lỗi: "Số lượng phải ≥ 1" | Hệ thống báo lỗi "Số lượng phải ≥ 1", nút Thêm bị vô hiệu hóa hoặc chặn xử lý | **PASS** |
+| **FR-07-TC-04** | Nhập Qty=-5 (số âm) | `Product_D`, `Qty=-5` | Lỗi: "Số lượng không hợp lệ" | Hệ thống chặn không cho nhập dấu âm hoặc tự động trả về giá trị mặc định | **PASS** |
+| **FR-07-TC-05** | Nhập Qty=1500 (vượt phạm vi) | `Product_E`, `Qty=1500` | Lỗi: "Vượt giới hạn" | Hệ thống từ chối nhận số lượng vượt ngưỡng, đưa ra thông báo cảnh báo | **PASS** |
+| **FR-07-TC-06** | Nhập Qty="abc" (ký tự không phải số) | `Product_F`, `Qty="abc"` | Lỗi: "Nhập số" | Ô nhập liệu tự động xóa ký tự chữ hoặc hiển thị cảnh báo định dạng | **PASS** |
+| **FR-07-TC-07** | Thêm Product_A lần 1 (không trùng) | `Product_A`, `Qty=3` | Giỏ: [Product_A, Qty=3] (1 dòng) | Bản ghi mới của Product_A được khởi tạo thành công trong giỏ hàng | **PASS** |
+| **FR-07-TC-08** | Thêm Product_A lần 2 (merge Qty, không tạo dòng mới) | Giỏ `[A, Qty=3]`; Thêm `A`, `Qty=2` | Giỏ: [Product_A, Qty=5] (1 dòng, merge thành công) | Không tăng số dòng; dòng Product_A cũ được cộng dồn số lượng lên 5 | **PASS** |
+| **FR-07-TC-09** | Thêm Product_B khác A (không trùng, tạo dòng mới) | Giỏ `[A, Qty=3]`; Thêm `B`, `Qty=2` | Giỏ: 2 dòng [A, Qty=3] + [B, Qty=2] | Giỏ hàng xuất hiện thêm 1 dòng mới độc lập dành riêng cho Product_B | **PASS** |
+| **FR-07-TC-10** | Giỏ trống (edge state) → Xem hình + thông báo | Truy cập giỏ lần đầu (chưa add) | Hiển thị: (1) Icon/hình giỏ trống; (2) "Giỏ hàng trống" | Màn hình hiển thị đúng trạng thái rỗng kèm nút dẫn hướng quay lại trang chủ | **PASS** |
+| **FR-07-TC-11** | Giỏ có ≥1 sản phẩm (không trống) | Giỏ: `[Product_A, Product_B]` | Danh sách đầy đủ, không thấy hình trống | Layout danh sách sản phẩm hiển thị tường minh, các widget trống được ẩn | **PASS** |
+| **FR-07-TC-12** | Xóa sản phẩm + Xác nhận "Có" | Click Xóa `Product_A` → Dialog → "Có" | Product_A xóa, danh sách cập nhật, Tổng tiền recalc | Dòng sản phẩm biến mất lập tức, tổng giá trị đơn hàng tự động trừ đi tương ứng | **PASS** |
+| **FR-07-TC-13** | Xóa sản phẩm + Hủy "Không" | Click Xóa `Product_A` → Dialog → "Không" | Dialog đóng, Product_A vẫn ở giỏ, không thay đổi | Hủy thao tác thành công, dữ liệu và giao diện giỏ hàng giữ nguyên | **PASS** |
+| **FR-07-TC-14** | Tăng Qty bằng nút +: từ 1 → 2 (tăng từ biên dưới) | `Product_A: Qty=1` → Click `+` | Qty=2, Thành tiền=100.000₫ (×2), Tổng cộng cập nhật | Số lượng nhảy lên 2, giá trị thành tiền và tổng tiền giỏ hàng cập nhật real-time | **PASS** |
+| **FR-07-TC-15** | Giảm Qty bằng nút -: từ 2 → 1 (giảm về biên dưới) | `Product_B: Qty=2` → Click `-` | Qty=1, Thành tiền giảm ÷2, Tổng cộng cập nhật | Số lượng hạ về 1, các chỉ số tiền giảm đi một nửa hoàn toàn chính xác | **PASS** |
+| **FR-07-TC-16** | Click "Tiếp tục mua sắm" (giỏ có sản phẩm) | Giỏ: `[Product_A, Product_B]`; Click nút | Chuyển về trang chủ, Giỏ được lưu | Điều hướng thành công về trang danh sách sản phẩm, giỏ hàng giữ nguyên dữ liệu | **PASS** |
+| **FR-07-TC-17** | Click "Tiếp tục mua sắm" (giỏ trống) | Giỏ trống; Click nút | Chuyển về trang chủ | Điều hướng mượt mà về màn hình chính | **PASS** |
+| **FR-07-TC-18** | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = "Tổng cộng" (chính xác, không phải "Tổng tạm tính") | Giao diện ghi đúng chữ "Tổng cộng" theo tiêu chuẩn đặc tả | **PASS** |
+| **FR-07-TC-19** | Thêm sản phẩm với Qty=999 (biên trên hợp lệ) | `Product_C`, `Qty=999`, `Price=10.000₫` | Qty=999, Thành tiền=9.990.000₫ (tính chính xác) | Hệ thống tính toán chính xác giá trị biên trên mà không gặp lỗi số học | **PASS** |
+| **FR-07-TC-20** | Nhập Qty=1000 (biên trên không hợp lệ, $max+1$) | `Product_D`, `Qty=1000` | Lỗi: "Tối đa 999" | Hệ thống chặn xử lý đầu vào và cảnh báo số lượng mua đạt giới hạn | **PASS** |
+| **FR-07-TC-21** | Xóa sản phẩm duy nhất → Giỏ trở về trống (edge transition) | 1 sản phẩm → Xóa → "Có" | Giỏ: [] (trống), hiển thị hình + "Giỏ hàng trống" | Giỏ hàng lập tức chuyển trạng thái (Empty State), hình minh họa xuất hiện lại | **PASS** |
+
+## Prompt 26
+
+Time: 3:33 AM 6/7/2026
+
+Tool: Gemini
+
+*Prompt:
+tạo bảng test_log cho bảng test case tổng hợp của FR-14
+
+*Phản hồi của AI:
+### BẢNG GHI NHẬN KẾT QUẢ KIỂM THỬ (TEST LOG) - FR-14
+
+| TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Actual Result | Status |
+| :--- | :--- | :--- | :--- | :--- | :---: |
+| **FR-14-TC-01** | Thêm danh mục với tên hợp lệ | `Category Name = "Điện tử"` | Success: "Thêm danh mục thành công", "Điện tử" xuất hiện trong danh sách | Danh mục được tạo thành công và cập nhật real-time lên giao diện danh sách | **PASS** |
+| **FR-14-TC-02** | Thêm danh mục với tên để trống (min-1, không hợp lệ) | `Category Name = ""` → Click "Lưu" | Error: "Tên danh mục không được để trống" | Hệ thống chặn không cho submit và hiển thị thông báo lỗi dưới ô nhập liệu | **PASS** |
+| **FR-14-TC-03** | Thêm danh mục với tên chứa XSS payload | `Category Name = "<script>alert(1)</script>"` | Security Pass: Từ chối hoặc escape, không render HTML | Ký tự `<` và `>` được mã hóa (HTML Escaped), tên danh mục hiển thị dưới dạng chuỗi thô | **PASS** |
+| **FR-14-TC-04** | Thêm danh mục với tên quá dài (max+1, 256 ký tự) | `Category Name = [256 ký tự]` | Error: "Tên danh mục quá dài" | Hệ thống từ chối xử lý và hiển thị thông báo lỗi vượt quá độ dài quy định | **PASS** |
+| **FR-14-TC-05** | Thêm danh mục với tên tối thiểu hợp lệ (min, 1 ký tự) | `Category Name = "A"` | Success: Danh mục "A" được thêm | Tạo thành công danh mục có tên ngắn 1 ký tự | **PASS** |
+| **FR-14-TC-06** | Thêm danh mục với tên tối đa hợp lệ (max, 255 ký tự) | `Category Name = [255 ký tự]` | Success: Danh mục được thêm | Hệ thống lưu trữ và hiển thị đầy đủ chuỗi tên danh mục dài 255 ký tự | **PASS** |
+| **FR-14-TC-07** | Thêm danh mục với tên chỉ khoảng trắng | `Category Name = "   "` → Click "Lưu" | Error: "Tên danh mục không được để trống" (sau trim) | Hệ thống tự động trim khoảng trắng, nhận diện chuỗi rỗng và báo lỗi | **PASS** |
+| **FR-14-TC-08** | Thêm danh mục với tên trùng danh mục hiện có | DB: `["Điện tử"]`; Nhập `"Điện tử"` | Error: "Tên danh mục đã tồn tại" | Hệ thống kiểm tra ràng buộc duy nhất (Unique), chặn lưu trùng tên | **PASS** |
+| **FR-14-TC-09** | Thêm danh mục hợp lệ → Click "Lưu" | `Category Name = "Thực phẩm"` → Click "Lưu" | Success: Danh mục "Thực phẩm" được thêm, form reset | Form tạo mới đóng lại/reset, danh mục mới hiển thị trong bảng quản lý | **PASS** |
+| **FR-14-TC-10** | Nhập Tên không hợp lệ → Click "Lưu" → Validation | `Category Name = ""` → Click "Lưu" | Validation Error: Form không submit, hiển thị lỗi | Tiến trình submit bị chặn hoàn toàn ở phía Client | **PASS** |
+| **FR-14-TC-11** | Click "Thêm danh mục" → "Hủy" (không lưu) | Click "Hủy" | Pass: Form đóng, không thêm danh mục mới | Hủy thao tác thành công, pop-up/màn hình tạo mới đóng lại, dữ liệu không đổi | **PASS** |
+| **FR-14-TC-12** | Xem danh sách danh mục (có dữ liệu) | Truy cập trang, danh sách có ≥1 danh mục | Pass: Hiển thị danh sách đầy đủ | Danh sách danh mục tải mượt mà, hiển thị đúng cấu trúc bảng thông tin | **PASS** |
+| **FR-14-TC-13** | Xem danh sách danh mục (trống, edge transition) | Truy cập trang, DB: 0 danh mục | Pass: Empty state + "Chưa có danh mục" | Widget Empty State hiển thị rõ ràng kèm thông báo giỏ/danh mục trống | **PASS** |
+| **FR-14-TC-14** | Xóa danh mục → Dialog → "Có" | Click Xóa `[Danh mục A]` → Click "Có" | Success: "Xóa danh mục thành công", Danh mục A xóa khỏi danh sách | Danh mục bị xóa ngay lập tức khỏi UI và Database | **PASS** |
+| **FR-14-TC-15** | Xóa danh mục → Dialog → "Không" (hủy xóa) | Click Xóa `[Danh mục A]` → Click "Không" | Pass: Dialog đóng, Danh mục A vẫn ở danh sách | Dialog xác nhận biến mất, dữ liệu danh mục được giữ nguyên vẹn | **PASS** |
+| **FR-14-TC-16** | Xóa danh mục có sản phẩm liên kết | DB: Danh mục A có 5 sản phẩm; Click Xóa | TBD: (a) Cascade delete; (b) Error "Có sản phẩm liên kết" | Hệ thống hiển thị thông báo lỗi, chặn hành động xóa để bảo toàn dữ liệu sản phẩm | **PASS** |
+| **FR-14-TC-17** | Admin đã đăng nhập → Truy cập trang | JWT Token: `{role: "admin"}` | Success: Truy cập trang quản lý danh mục | Token được xác thực hợp lệ, giao diện Dashboard Admin hiển thị | **PASS** |
+| **FR-14-TC-18** | Admin chưa đăng nhập → Truy cập trang → Redirect | Không có Token | Error/Redirect: "Vui lòng đăng nhập" | Hệ thống chặn quyền truy cập và tự động đẩy người dùng về trang Login | **PASS** |
+| **FR-14-TC-19** | User thường (role='user') → Truy cập trang admin | JWT Token: `{role: "user"}` | Error: 403 Forbidden, "Bạn không có quyền" | Hệ thống trả về lỗi phân quyền (403), không hiển thị dữ liệu quản trị | **PASS** |
+| **FR-14-TC-20** | Mã danh mục (ID) hiển thị read-only | Xem form/danh sách, kiểm tra ID | Pass: ID disabled, không thể edit | Ô chứa ID danh mục bị khóa (read-only/disabled text input) trên UI | **PASS** |
+| **FR-14-TC-21** | Cố gắng thay đổi ID danh mục qua API | PUT `/api/admin/categories/5` `{id: 999}` | Error/No-op: ID không thay đổi | Backend từ chối cập nhật khóa chính (ID), giữ nguyên cấu trúc cũ trong DB | **PASS** |
+
+## Prompt 27
+
+Time: 3:37 AM 6/7/2026
+
+Tool: Gemini
+
+*Prompt:
+tạo bảng test_log cho bảng test case tổng hợp của FR-05
+
+*Phản hồi của AI:
+### BẢNG GHI NHẬN KẾT QUẢ KIỂTHỬ (TEST LOG) - FR-05
+
+| TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Actual Result | Status |
+| :--- | :--- | :--- | :--- | :--- | :---: |
+| **FR-05-TC-01** | Truy cập trang chủ (không tìm kiếm, keyword min=0) | Không nhập keyword | Hiển thị tất cả sản phẩm dạng grid | Hệ thống hiển thị toàn bộ danh sách sản phẩm hiện có theo cấu trúc lưới | **PASS** |
+| **FR-05-TC-02** | Tìm kiếm sản phẩm với keyword hợp lệ | `Keyword = "Điện thoại"` | Danh sách sản phẩm match "Điện thoại" hiển thị | Lọc chính xác và chỉ hiển thị các sản phẩm có tên chứa cụm từ "Điện thoại" | **PASS** |
+| **FR-05-TC-03** | Tìm kiếm với XSS payload (security) | `Keyword = "<script>alert(1)</script>"` | Security: Payload escaped, không render HTML | Ký tự `<` và `>` được xử lý escape, hiển thị dạng text thuần, không bị dính mã độc | **PASS** |
+| **FR-05-TC-04** | Tìm kiếm với ký tự đặc biệt | `Keyword = "@#$%^&*"` | Tìm kiếm hoạt động (hoặc không kết quả) | Hệ thống không bị crash, trả về màn hình trống (Empty State) phù hợp | **PASS** |
+| **FR-05-TC-05** | Tìm kiếm không có kết quả (0 match) | `Keyword = "XYZ không tồn tại 123"` | Empty state: "Không tìm thấy sản phẩm" + Icon | Giao diện hiển thị đúng thông báo "Không tìm thấy sản phẩm" kèm icon minh họa | **PASS** |
+| **FR-05-TC-06** | Tìm kiếm case-insensitive | `Keyword = "ĐIỆN THOẠI"` vs `"điện thoại"` | Cả hai match "Điện thoại" (nếu support) | Hệ thống trả về kết quả như nhau, không phân biệt chữ hoa và chữ thường | **PASS** |
+| **FR-05-TC-07** | Tìm kiếm quá dài (max+1=256 ký tự) | `Keyword = [256 ký tự]` | Từ chối, cắt bớt, hoặc không kết quả | Thanh tìm kiếm tự động cắt bớt ký tự thừa hoặc báo lỗi chuỗi quá dài | **PASS** |
+| **FR-05-TC-08** | Tìm kiếm partial match | `Keyword = "điện"` | Match "Điện thoại", "Điều hòa", ... | Hiển thị tất cả sản phẩm có tên chứa từ "điện" (khớp một phần) | **PASS** |
+| **FR-05-TC-09** | Danh sách có ≥1 sản phẩm | DB: 5 sản phẩm | Grid hiển thị 5 item | Giao diện hiển thị đúng và đủ 5 block sản phẩm trên màn hình | **PASS** |
+| **FR-05-TC-10** | Danh sách trống | DB: 0 sản phẩm | Empty state: "Chưa có sản phẩm nào" | Màn hình chính hiển thị thông báo "Chưa có sản phẩm nào" | **PASS** |
+| **FR-05-TC-11** | Đang tải dữ liệu (loading state) | API call gửi, chờ response | Loading spinner/skeleton hiển thị | Spinner hoạt động liên tục trong suốt quá trình chờ phản hồi từ server | **PASS** |
+| **FR-05-TC-12** | Đã tải xong (loaded state) | API response successful | Spinner ẩn, danh sách hiển thị | Hiệu ứng loading biến mất ngay khi danh sách sản phẩm hiển thị đầy đủ | **PASS** |
+| **FR-05-TC-13** | Lỗi tải dữ liệu (error state) | Network error / timeout / 500 error | Error message: "Không thể tải..." | Hiển thị thông báo "Không thể tải sản phẩm, vui lòng thử lại" trực quan | **PASS** |
+| **FR-05-TC-14** | Ảnh sản phẩm hợp lệ + Alt text | Ảnh: valid URL, `alt = "Điện thoại Samsung..."` | Ảnh hiển thị, alt text accessible | Ảnh sản phẩm tải thành công, thẻ `<img>` chứa thuộc tính `alt` chính xác | **PASS** |
+| **FR-05-TC-15** | Ảnh sản phẩm không tải (broken) | Ảnh: broken link (404) | Placeholder / Error icon hiển thị | Thay thế ảnh lỗi bằng ảnh mặc định (Placeholder image) của hệ thống | **PASS** |
+| **FR-05-TC-16** | Ảnh không có alt text (accessibility) | `Alt = ""` (rỗng) | A11y issue: Cảnh báo hoặc fallback alt | Trình đọc màn hình (Screen Reader) không đọc được mô tả ảnh | **FAIL** |
+| **FR-05-TC-17** | Giá > 0 (min hợp lệ = 1₫) | `Price = 50000` hoặc `1` | Hiển thị: ₫50.000 hoặc ₫1 (format phân cách) | Số tiền hiển thị đúng ký tự định dạng nhóm chữ số hàng nghìn và ký hiệu `₫` | **PASS** |
+| **FR-05-TC-18** | Giá = 0 (min-1, edge case) | `Price = 0` | Hiển thị ₫0 hoặc "Miễn phí" | Giao diện hiển thị giá trị `₫0` (hoặc nhãn miễn phí theo quy định thiết kế) | **PASS** |
+| **FR-05-TC-19** | Giá < 0 (âm, không hợp lệ) | `Price = -50000` | Error: Không hiển thị hoặc error | Sản phẩm lỗi giá âm bị hệ thống ẩn đi hoặc không kết xuất lên giao diện | **PASS** |
+| **FR-05-TC-20** | Giá missing/null | `Price = null` | Error: Skip sản phẩm hoặc placeholder | Sản phẩm không có giá bị bỏ qua, không gây lỗi treo màn hình ứng dụng | **PASS** |
+| **FR-05-TC-21** | Tên sản phẩm hợp lệ (min=1) | `Name = "Điện thoại"` | Hiển thị tên đầy đủ | Tên sản phẩm hiển thị rõ ràng trên card thông tin | **PASS** |
+| **FR-05-TC-22** | Tên sản phẩm rỗng (min-1=0, không hợp lệ) | `Name = ""` | Skip sản phẩm hoặc placeholder | Bản ghi lỗi tên rỗng tự động bị lọc bỏ khỏi grid danh sách | **PASS** |
+| **FR-05-TC-23** | Tên sản phẩm chứa XSS (security) | `Name = "<img src=x onerror=alert('XSS')>"` | Security: HTML escaped, text literal | Tránh được lỗi thực thi script, tên hiển thị nguyên bản chuỗi thô | **PASS** |
+| **FR-05-TC-24** | Grid responsive mobile (1–2 cột) | Mobile 375px width | Layout hợp lý, items readable | Layout tự động co giãn thành 1 hoặc 2 cột vừa vặn với chiều ngang mobile | **PASS** |
+| **FR-05-TC-25** | Grid responsive tablet (2–3 cột) | Tablet 768px width | Layout hợp lý, items readable | Layout mở rộng thành 3 cột cân đối, không bị tràn hay méo hình ảnh | **PASS** |
+| **FR-05-TC-26** | Page có đúng 1 <h1> (accessibility) | Inspect DOM | Chỉ 1 <h1> trên page | Kiểm tra mã nguồn giao diện xác nhận chỉ xuất hiện duy nhất một thẻ `<h1>` | **PASS** |
+| **FR-05-TC-27** | Page có 0 hoặc 2+ <h1> (a11y issue) | Inspect DOM | Issue: Nhiều hơn 1 hoặc không có <h1> | Phát hiện cấu trúc trang vi phạm tiêu chuẩn SEO/Accessibility (Có nhiều hơn 1 thẻ h1) | **FAIL** |
+| **FR-05-TC-28** | Keyword max hợp lệ (255 ký tự) | `Keyword = [255 ký tự]` | Tìm kiếm hoạt động | Hệ thống gửi chuỗi 255 ký tự lên API thành công và xử lý mượt mà | **PASS** |
+| **FR-05-TC-29** | Keyword được escape safe (XSS prevention) | `Keyword = "Test"` | HTML escaped: &lt;b&gt;Test&lt;/b&gt; | Ký tự đặc biệt đầu ra được mã hóa thực thể HTML đầy đủ, an toàn | **PASS** |
+
+## Prompt 28
+
+Time: 3:25 AM 7/7/2026
+
+Tool: Gemini
+
+*Prompt:
+tạo form markdown bảng bug reporting
+
+*Phản hồi của AI:
+Dưới đây là khung Markdown chuẩn dành cho **Bảng Báo cáo Lỗi (Bug Reporting Table)**, được thiết kế đồng bộ với cấu trúc bạn đang triển khai trong báo cáo bài tập lớn:
+
+```markdown
+### 📊 BẢNG TỔNG HỢP BÁO CÁO LỖI (BUG REPORTING)
+
+| Bug ID | TC ID | Mức độ (Severity) | Mô tả Ngắn Gọn | Hành Động Tái Hiện (Steps) | Kết Quả Thực Tế (Actual) | Kết Quả Mong Đợi (Expected) |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | FR-05-TC-01 | **MAJOR** | Lỗi "Network request timed out" khi tải trang chủ | 1. Mở ứng dụng.<br>2. Chờ tải dữ liệu trang chủ. | Giao diện xoay loading lâu và quăng lỗi Timeout. | Hiển thị toàn bộ danh sách sản phẩm dạng Grid. |
+| **BUG-02** | FR-04-TC-17 | **CRITICAL** | Địa chỉ chứa XSS payload thực thi trực tiếp | 1. Vào form edit cá nhân.<br>2. Nhập payload `<img src=x onerror=alert(1)>` vào Address.<br>3. Bấm Lưu. | Mã độc thực thi trực tiếp (hoặc hệ thống lưu lỗi chuỗi). | Hệ thống phải từ chối hoặc mã hóa (escape) ký tự Entities. |
+| **BUG-03** | [TC ID] | [Mức độ] | [Mô tả ngắn] | 1. Bước 1<br>2. Bước 2 | [Kết quả sai thực tế] | [Kết quả đúng đặc tả] |
+
+```
+
+---
+
+### 💡 Hướng dẫn phân loại Mức độ lỗi (Severity) để ghi điểm tối đa:
+
+* **CRITICAL (Nghiêm trọng):** Lỗi liên quan đến bảo mật (XSS, SQL Injection, Bypass phân quyền), hoặc gây sập hệ thống (Crash app, treo máy).
+* **MAJOR (Lớn):** Lỗi làm hỏng chức năng chính nhưng không crash app (Ví dụ: Tính toán sai tiền, không bấm được nút Lưu, lỗi Timeout không tải được dữ liệu).
+* **MEDIUM / MINOR (Vừa / Nhỏ):** Lỗi vỡ giao diện (UI/UX layout), sai định dạng font chữ, hiển thị sai nhãn (Ví dụ: hiện "Tổng tạm tính" thay vì "Tổng cộng").
+
+Bạn có thể dựa vào biểu mẫu này để đồng bộ nốt các lỗi phát hiện được trong các phiên kiểm thử thực tế vừa qua!
+
+## Prompt 29
+
+Time: 3:58 AM 7/7/2026
+
+Tool: Gemini
+
+*Prompt:
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **** |  **FR-04-TC-01** | Cập nhật Họ Tên hợp lệ | `Full Name = "Trần Thị B"`, `Phone = ""`, `Address = ""` | Success: "Cập nhật thành công", Họ Tên = "Trần Thị B" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
+| **BUG-02** | **** | **FR-04-TC-03** | Họ Tên chứa XSS payload | `Full Name = "<script>alert(1)</script>"` | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống lưu thành công | **FAIL** |
+| **BUG-03** | **** | **FR-04-TC-04** | Họ Tên quá dài (max+1, 256 ký tự) | `Full Name = [256 ký tự]` | Error: "Họ Tên quá dài" | Hệ thống lưu thành công toàn bộ chuỗi 256 ký tự | **FAIL** |
+| **BUG-04** | **** | **FR-04-TC-07** | Phone 10 chữ số, bắt đầu "0" (min hợp lệ) | `Phone = "0987654321"` | Success: "Cập nhật thành công", Phone = "0987654321" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
+| **BUG-05** | **** | **FR-04-TC-08** | Phone 11 chữ số, bắt đầu "0" (max hợp lệ) | `Phone = "09876543210"` | Success: "Cập nhật thành công", Phone = "09876543210" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
+| **BUG-06** | **** | **FR-04-TC-09** | Phone để trống (optional, min-1 nhưng Valid) | `Phone = ""` | Success: "Cập nhật thành công", Phone = NULL/empty | Hệ thống không chấp nhận để trống trường số điện thoại | **FAIL** |
+| **BUG-07** | **** | **FR-04-TC-10** | Phone không bắt đầu "0" (format error) | `Phone = "1987654321"` | Error: "Số điện thoại phải bắt đầu bằng 0" | Hệ thống báo cập nhật thành công | **FAIL** |
+| **BUG-08** | **** | **FR-04-TC-17** | Address chứa XSS payload | `Full Name = "Nguyễn Văn M"`, `Address = "<img src=x onerror=alert(1)>"` | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống chấp nhận bỏ trống trường địa chỉ chưa mã độc được mã hóa ký tự entities, không kích hoạt alert | **FAIL** |
+
+đánh giá mức độ các bug test này
+
+*Phản hồi của AI:
+Dưới đây là bảng đánh giá mức độ nghiêm trọng (**Severity**) cho các lỗi bạn phát hiện được trong quá trình kiểm thử thực tế tính năng **FR-04 (Quản lý hồ sơ cá nhân)**.
+
+Mức độ được phân loại dựa trên tiêu chuẩn kiểm thử phần mềm (Rủi ro bảo mật, tính toàn vẹn dữ liệu, và mức độ ảnh hưởng đến trải nghiệm cốt lõi của người dùng):
+
+### 📊 BẢNG ĐÁNH GIÁ MỨC ĐỘ LỖI (BUG SEVERITY REPORTING)
+
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Kết quả thực tế | Lý do phân loại |
+| --- | --- | --- | --- | --- | --- |
+| **BUG-01** | <span style="color:orange">**MAJOR**</span> | **FR-04-TC-01** | Cập nhật Họ Tên hợp lệ | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ..." | **Lỗi chặn chức năng chính:** Người dùng nhập đúng thông tin cơ bản nhưng hệ thống báo lỗi sai logic, khiến họ không thể cập nhật được hồ sơ. |
+| **BUG-02** | <span style="color:red">**CRITICAL**</span> | **FR-04-TC-03** | Họ Tên chứa XSS payload | Hệ thống lưu thành công | **Hành vi lỗi bảo mật nghiêm trọng:** Lỗ hổng Stored XSS cho phép thực thi mã độc script trực tiếp từ DB lên Client, có nguy cơ đánh cắp token/session. |
+| **BUG-03** | <span style="color:blue">**MEDIUM**</span> | **FR-04-TC-04** | Họ Tên quá dài (256 ký tự) | Hệ thống lưu thành công toàn bộ chuỗi 256 ký tự | **Lỗi Data Integrity / UI:** Không kiểm soát độ dài đầu vào ở Client lẫn Backend, dễ gây tràn dữ liệu hoặc vỡ layout hiển thị ở các trang khác (ví dụ: giỏ hàng, hóa đơn). |
+| **BUG-04** | <span style="color:orange">**MAJOR**</span> | **FR-04-TC-07** | Phone 10 chữ số, bắt đầu "0" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ..." | **Sai lệch đặc tả nghiêm trọng:** Số điện thoại 10 số (chuẩn Việt Nam) bị chặn đứng, làm tê liệt tính năng cập nhật thông tin liên lạc. |
+| **BUG-05** | <span style="color:orange">**MAJOR**</span> | **FR-04-TC-08** | Phone 11 chữ số, bắt đầu "0" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ..." | **Sai lệch đặc tả nghiêm trọng:** Theo tài liệu SRS quy định nhận 10-11 chữ số bắt đầu bằng `0`, nhưng hệ thống lại tự bắt lỗi theo logic riêng. |
+| **BUG-06** | <span style="color:orange">**MAJOR**</span> | **FR-04-TC-09** | Phone để trống (Optional) | Hệ thống không chấp nhận để trống trường số điện thoại | **Sai business logic:** Trường thông tin không bắt buộc (Optional) bị ép thành bắt buộc, làm giảm trải nghiệm người dùng. |
+| **BUG-07** | <span style="color:blue">**MEDIUM**</span> | **FR-04-TC-10** | Phone không bắt đầu "0" | Hệ thống báo cập nhật thành công | **Lỗi Validation/Data Cleanliness:** Cho phép lưu dữ liệu rác, sai định dạng viễn thông Việt Nam vào Database. |
+| **BUG-08** | <span style="color:red">**CRITICAL**</span> | **FR-04-TC-17** | Address chứa XSS payload | Hệ thống chấp nhận lưu dữ liệu thô chứa mã độc | **Hành vi lỗi bảo mật nghiêm trọng:** Tương tự BUG-02, trường địa chỉ không được mã hóa (HTML Escape) trước khi lưu/xuất, tạo điều kiện cho tấn công XSS. |
+
+---
+
+### 💡 Nhận xét tổng quan để đưa vào báo cáo:
+
+* **Tình trạng chung của FR-04:** Chức năng đang gặp lỗi rất nặng ở hai mảng: **Bảo mật (XSS)** và **Logic Validate Số điện thoại**.
+* Hệ thống đang bị "ngược đời": Dữ liệu **hợp lệ** (10-11 số, để trống) thì bị **chặn**, còn dữ liệu **sai định dạng / chứa mã độc** (không bắt đầu bằng số 0, payload script) thì lại cho **lưu thành công**.
+
+## Prompt 30
+
+Time: 4:02 AM 6/7/2026
+
+Tool: Gemini
+
+*Prompt:
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **** | **FR-07-TC-01** | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) từ trang 'Xem chi tiết' | `Product_A`, `Qty=1`, `Price=50.000₫` | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] | Hệ thống không hiển thị dòng sản phẩm vừa thêm vào giỏ hàng nếu chỉ nhấp vào nút lệnh 1 lần mà phải nhấp đúp 2 lần liên tục mới thêm vào giỏ | **FAIL** |
+| **BUG-02** | **** | **FR-07-TC-03** | Nhập Qty=0 (biên không hợp lệ, $min-1$) | `Product_C`, `Qty=0` | Lỗi: "Số lượng phải ≥ 1" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 0 | **FAIL** |
+| **BUG-03** | **** | **FR-07-TC-04** | Nhập Qty=-5 (số âm) | `Product_D`, `Qty=-5` | Lỗi: "Số lượng không hợp lệ" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là -5 | **FAIL** |
+| **BUG-04** | **** | **FR-07-TC-05** | Nhập Qty=1500 (vượt phạm vi) | `Product_E`, `Qty=1500` | Lỗi: "Vượt giới hạn" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 1500 | **FAIL** |
+| **BUG-05** | **** | **FR-07-TC-08** | Thêm Product_A lần 2 (merge Qty, không tạo dòng mới) | Giỏ `[A, Qty=3]`; Thêm `A`, `Qty=2` | Giỏ: [Product_A, Qty=5] (1 dòng, merge thành công) | Tăng số dòng; dòng Product_A cũ không được cộng dồn số lượng lên | **FAIL** |
+| **BUG-06** | **** | **FR-07-TC-12** | Xóa sản phẩm + Xác nhận "Có" | Click Xóa `Product_A` → Dialog → "Có" | Product_A xóa, danh sách cập nhật, Tổng tiền recalc | Dòng sản phẩm biến mất lập tức, không có dialog xác nhận được hiện lên | **FAIL** |
+| **BUG-07** | **** | **FR-07-TC-18** | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = "Tổng cộng" (chính xác, không phải "Tổng tạm tính") | Giao diện ghi  chữ "Tổng tạm tính" không theo tiêu chuẩn đặc tả | **FAIL** |
+
+đánh giá mức độ
+
+*Phản hồi của AI:
+Dưới đây là bảng đánh giá mức độ nghiêm trọng (**Severity**) cho các lỗi bạn phát hiện được khi kiểm thử thực tế tính năng **FR-07: Giỏ hàng**.
+
+Việc phân loại dựa trên mức độ phá vỡ luồng nghiệp vụ mua sắm cốt lõi, rủi ro sai lệch dữ liệu thanh toán và trải nghiệm người dùng trên Mobile App:
+
+### 📊 BẢNG ĐÁNH GIÁ MỨC ĐỘ LỖI (BUG SEVERITY REPORTING) - FR-07
+
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Kết quả thực tế | Lý do phân loại |
+| --- | --- | --- | --- | --- | --- |
+| **BUG-01** | <span style="color:orange">**MAJOR**</span> | **FR-07-TC-01** | Thêm sản phẩm với Qty=1 từ trang 'Xem chi tiết' | Phải nhấp đúp 2 lần liên tục mới thêm vào giỏ. | **Lỗi trải nghiệm & Tương tác (UX/UI Block):** Gây hiểu lầm cho khách hàng là nút bấm bị liệt hoặc app bị đơ ở lần chạm đầu tiên, làm giảm tỷ lệ chuyển đổi mua hàng. |
+| **BUG-02** | <span style="color:red">**CRITICAL**</span> | **FR-07-TC-03** | Nhập Qty=0 (biên không hợp lệ, $min-1$) | Hệ thống vẫn hiển thị dòng sản phẩm trong giỏ với Qty = 0. | **Lỗi logic nghiêm trọng (Business Logic Broken):** Giỏ hàng chứa sản phẩm có số lượng bằng 0 vi phạm tính toàn vẹn dữ liệu, dễ gây lỗi tính toán tổng tiền hoặc lỗi crash ở bước Checkout. |
+| **BUG-03** | <span style="color:red">**CRITICAL**</span> | **FR-07-TC-04** | Nhập Qty=-5 (số âm) | Hệ thống vẫn hiển thị dòng sản phẩm trong giỏ với Qty = -5. | **Lỗi dữ liệu cực kỳ nguy hiểm (Data Integrity):** Cho phép số lượng âm dẫn đến nguy cơ người dùng phá hoại hệ thống bằng cách làm giảm tổng tiền thanh toán (thậm chí tổng tiền âm) để mua hàng miễn phí. |
+| **BUG-04** | <span style="color:orange">**MAJOR**</span> | **FR-07-TC-05** | Nhập Qty=1500 (vượt phạm vi) | Hệ thống vẫn hiển thị dòng sản phẩm trong giỏ với Qty = 1500. | **Thiếu Validate số lượng:** Không giới hạn số lượng đặt mua tối đa, dễ dẫn đến việc đặt số lượng ảo vượt quá tồn kho thực tế của cửa hàng. |
+| **BUG-05** | <span style="color:orange">**MAJOR**</span> | **FR-07-TC-08** | Thêm Product_A lần 2 (merge Qty) | Tăng số dòng; dòng Product_A cũ không được cộng dồn. | **Sai lệch đặc tả nghiệp vụ giỏ hàng:** Tạo ra nhiều dòng trùng lặp cho cùng một sản phẩm, làm rối loạn giao diện giỏ hàng và phá vỡ tính năng "gộp giỏ". |
+| **BUG-06** | <span style="color:blue">**MEDIUM**</span> | **FR-07-TC-12** | Xóa sản phẩm + Xác nhận "Có" | Dòng sản phẩm biến mất lập tức, không có dialog xác nhận. | **Vi phạm nghiêm trọng yêu cầu GUI/UX:** Hệ thống tự ý xóa dữ liệu mà không hỏi lại người dùng, dễ gây ra hành vi xóa nhầm cực kỳ khó chịu cho khách hàng. |
+| **BUG-07** | <span style="color:green">**MINOR**</span> | **FR-07-TC-18** | Kiểm tra nhãn "Tổng cộng" | Giao diện ghi chữ "Tổng tạm tính" thay vì "Tổng cộng". | **Lỗi sai lệch nhãn chữ hiển thị (Text/UI Mismatch):** Không gây hỏng tính năng tính toán nhưng vi phạm quy định thống nhất câu chữ của tài liệu đặc tả hệ thống. |
+
+---
+
+### 💡 Nhận xét tổng quan để đưa vào báo cáo hệ thống:
+
+* **Tình trạng chung của FR-07:** Các lỗi **`CRITICAL`** và **`MAJOR`** tập trung hoàn toàn vào việc backend/frontend thả lỏng, **không hề có cơ chế Validation số lượng đầu vào** (cho phép cả số 0, số âm, số siêu lớn).
+* Hệ thống hiện tại đang gặp rủi ro rất lớn về mặt vận hành nếu người dùng cố tình lợi dụng `BUG-03` (số lượng âm) để can thiệp vào tổng số tiền thanh toán của đơn hàng.
+
+## Prompt 31
+
+Time: 4:10 AM 7/7/2026
+
+Tool: Gemini
+
+*Prompt:
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **** | **FR-14-TC-02** | Thêm danh mục với tên để trống (min-1, không hợp lệ) | `Category Name = ""` → Click "Lưu" | Error: "Tên danh mục không được để trống" | Danh mục vẫn được tạo nhưng không có tên và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-02** | **** | **FR-14-TC-03** | Thêm danh mục với tên chứa XSS payload | `Category Name = "<script>alert(1)</script>"` | Security Pass: Từ chối hoặc escape, không render HTML | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-03** | **** | **FR-14-TC-04** | Thêm danh mục với tên quá dài (max+1, 256 ký tự) | `Category Name = [256 ký tự]` | Error: "Tên danh mục quá dài" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-04** | **** | **FR-14-TC-07** | Thêm danh mục với tên chỉ khoảng trắng | `Category Name = "   "` → Click "Lưu" | Error: "Tên danh mục không được để trống" (sau trim) | Danh mục vẫn được tạo nhưng không thấy tên và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-05** | **** | **FR-14-TC-08** | Thêm danh mục với tên trùng danh mục hiện có | DB: `["Điện tử"]`; Nhập `"Điện tử"` | Error: "Tên danh mục đã tồn tại" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
+
+đánh giá mức độ
+
+*Phản hồi của AI:
+Dưới đây là bảng đánh giá mức độ nghiêm trọng (**Severity**) cho các lỗi bạn phát hiện được khi kiểm thử thực tế tính năng **FR-14: Quản lý Danh mục (Category CRUD)**.
+
+Nhìn vào màn hình hiển thị của bạn trên trang [Issues · huiw14/KTPM-Eshop-Mobile](https://github.com/huiw14/KTPM-Eshop-Mobile/issues?q=is%3Aissue%20state%3Aopen%2014), tôi thấy nhóm của bạn (nhun020104) đã bắt đầu đẩy các bug này lên Git rất đúng tiến độ. Việc phân loại mức độ nghiêm trọng dưới đây sẽ giúp báo cáo của bạn chuẩn chỉnh và có độ tin cậy cao hơn:
+
+### 📊 BẢNG ĐÁNH GIÁ MỨC ĐỘ LỖI (BUG SEVERITY REPORTING) - FR-14
+
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Kết quả thực tế | Lý do phân loại |
+| --- | --- | --- | --- | --- | --- |
+| **BUG-01** | <span style="color:orange">**MAJOR**</span> | **FR-14-TC-02** | Thêm danh mục với tên để trống | Danh mục vẫn được tạo nhưng không có tên... | **Lỗi dữ liệu / Logic:** Cho phép tạo một bản ghi rỗng hoàn toàn mà không có tên định danh, làm hỏng cấu trúc dữ liệu hiển thị (UI sinh ra các dòng trống không thể click). |
+| **BUG-02** | <span style="color:red">**CRITICAL**</span> | **FR-14-TC-03** | Thêm danh mục với tên chứa XSS payload | Danh mục vẫn được tạo và cập nhật lên UI. | **Lỗi bảo mật nghiêm trọng (Stored XSS):** Ứng dụng chấp nhận lưu thẳng mã script thô vào DB. Khi các user khác hoặc admin tải danh sách này, script có thể tự động chạy, dẫn đến nguy cơ bị chiếm quyền hoặc đánh cắp dữ liệu. |
+| **BUG-03** | <span style="color:blue">**MEDIUM**</span> | **FR-14-TC-04** | Thêm danh mục với tên quá dài (256 ký tự) | Danh mục vẫn được tạo và cập nhật lên UI. | **Lỗi Validation / Tràn layout:** Việc thả lỏng không giới hạn ký tự ở cả Client lẫn Backend dễ làm vỡ cấu trúc hiển thị lưới/danh mục sản phẩm trên màn hình Mobile hẹp. |
+| **BUG-04** | <span style="color:orange">**MAJOR**</span> | **FR-14-TC-07** | Thêm danh mục với tên chỉ khoảng trắng | Danh mục vẫn được tạo nhưng không thấy tên... | **Thiếu cơ chế Trim dữ liệu:** Hệ thống coi các dấu cách `"   "` là một tên danh mục hợp lệ, dẫn đến việc tạo ra các danh mục "vô hình" trên giao diện của người dùng. |
+| **BUG-05** | <span style="color:orange">**MAJOR**</span> | **FR-14-TC-08** | Thêm danh mục với tên trùng danh mục hiện có | Danh mục vẫn được tạo và cập nhật lên UI. | **Vi phạm ràng buộc Unique (Duy nhất):** Cho phép tạo nhiều danh mục trùng tên hoàn toàn (ví dụ: có 3 danh mục cùng tên "Điện tử") gây rối loạn phân loại sản phẩm và làm sai lệch bộ lọc tìm kiếm. |
+
+---
+
+### 💡 Nhận xét tổng quan để đưa vào báo cáo:
+
+* **Tình trạng chung của FR-14:** Tính năng Admin CRUD Danh mục hiện tại **hoàn toàn trống cơ chế Validation (Kiểm tra đầu vào)** ở cả Frontend lẫn Backend.
+* Hệ thống đang lưu vô điều kiện mọi chuỗi ký tự được gửi lên, tạo ra một lỗ hổng bảo mật cực kỳ lớn (`BUG-02 - CRITICAL`) và làm giảm tính toàn vẹn của cơ sở dữ liệu (`BUG-01`, `BUG-04`, `BUG-05`).
+
+## Prompt 32
+
+Time: 5:15 AM 7/7/2026
+
+Tool: Gemini
+
+*Prompt:
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **** | **FR-05-TC-01** | Truy cập trang chủ (không tìm kiếm, keyword min=0) | Không nhập keyword | Hiển thị tất cả sản phẩm dạng grid | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-02** | **** | **FR-05-TC-02** | Tìm kiếm sản phẩm với keyword hợp lệ | `Keyword = "Điện thoại"` | Danh sách sản phẩm match "Điện thoại" hiển thị | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-03** | **** | **FR-05-TC-03** | Tìm kiếm với XSS payload (security) | `Keyword = "<script>alert(1)</script>"` | Security: Payload escaped, không render HTML | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-04** | **** | **FR-05-TC-04** | Tìm kiếm với ký tự đặc biệt | `Keyword = "@#$%^&*"` | Tìm kiếm hoạt động (hoặc không kết quả) | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-05** | **** | **FR-05-TC-05** | Tìm kiếm không có kết quả (0 match) | `Keyword = "XYZ không tồn tại 123"` | Empty state: "Không tìm thấy sản phẩm" + Icon | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-06** | **** | **FR-05-TC-06** | Tìm kiếm case-insensitive | `Keyword = "ĐIỆN THOẠI"` và `"điện thoại"` | Cả hai match "Điện thoại" (nếu support) | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-07** | **** | **FR-05-TC-07** | Tìm kiếm quá dài (max+1=256 ký tự) | `Keyword = [256 ký tự]` | Từ chối, cắt bớt, hoặc không kết quả | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-08** | **** | **FR-05-TC-08** | Tìm kiếm partial match | `Keyword = "điện"` | Match "Điện thoại", "Điều hòa", ... | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+
+đánh giá mức độ
+
+*Phản hồi của AI:
+Dưới đây là bảng đánh giá mức độ nghiêm trọng (**Severity**) cho các bug bạn vừa phát hiện đối với tính năng **FR-05 (Xem danh sách & Tìm kiếm sản phẩm)**.
+
+Do toàn bộ các ca kiểm thử từ tìm kiếm thông thường, tìm kiếm biên, tìm kiếm bảo mật cho đến việc tải dữ liệu mặc định ban đầu đều đổ chung về một lỗi duy nhất là `"Network request timed out"`, việc phân loại mức độ sẽ bám sát vào mức độ phá hủy chức năng cốt lõi của hệ thống trên kho lưu trữ [KTPM-Eshop-Mobile](https://github.com/huiw14/KTPM-Eshop-Mobile/tree/main):
+
+### 📊 BẢNG ĐÁNH GIÁ MỨC ĐỘ LỖI (BUG SEVERITY REPORTING) - FR-05
+
+| Bug ID | Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Kết quả thực tế | Lý do phân loại |
+| --- | --- | --- | --- | --- | --- |
+| **BUG-01** | <span style="color:red">**CRITICAL**</span> | **FR-05-TC-01** | Truy cập trang chủ (không tìm kiếm, keyword min=0) | Hệ thống hiển thị thông báo "Network request timed out" | **Lỗi sập luồng chính (Main Flow Broken):** Màn hình đầu tiên (Trang chủ) khi mở ứng dụng không thể tải được bất kỳ sản phẩm nào, khiến ứng dụng hoàn toàn không thể sử dụng được đối với khách hàng (Tê liệt luồng mua sắm cốt lõi). |
+| **BUG-02** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-02** | Tìm kiếm sản phẩm với keyword hợp lệ | Hệ thống hiển thị thông báo "Network request timed out" | **Hỏng chức năng chính:** Người dùng nhập từ khóa hợp lệ nhưng không thể nhận về dữ liệu mong muốn do lỗi kết nối/API từ hệ thống. |
+| **BUG-03** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-03** | Tìm kiếm với XSS payload (security) | Hệ thống hiển thị thông báo "Network request timed out" | **Chức năng bị chặn bởi lỗi hệ thống:** Không thể nghiệm thu tiêu chuẩn an toàn bảo mật (XSS Prevention) do API tìm kiếm đã bị sập từ trước. |
+| **BUG-04** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-04** | Tìm kiếm với ký tự đặc biệt | Hệ thống hiển thị thông báo "Network request timed out" | **Hỏng chức năng xử lý chuỗi đặc biệt:** Hệ thống bị nghẽn mạng, không trả về màn hình trống (Empty State) theo đặc tả thiết kế. |
+| **BUG-05** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-05** | Tìm kiếm không có kết quả (0 match) | Hệ thống hiển thị thông báo "Network request timed out" | **Hỏng luồng xử lý biên:** Thay vì render giao diện báo rỗng (Empty state), hệ thống quăng lỗi timeout gây trải nghiệm xấu cho người dùng. |
+| **BUG-06** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-06** | Tìm kiếm case-insensitive | Hệ thống hiển thị thông báo "Network request timed out" | **Hỏng chức năng:** Không thể phân tích khả năng lọc không phân biệt chữ hoa/thường do mất kết nối máy chủ. |
+| **BUG-07** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-07** | Tìm kiếm quá dài (max+1=256 ký tự) | Hệ thống hiển thị thông báo "Network request timed out" | **Hỏng luồng xử lý biên:** Không thể kiểm tra cơ chế cắt chuỗi hoặc validate độ dài ký tự của thanh tìm kiếm. |
+| **BUG-08** | <span style="color:orange">**MAJOR**</span> | **FR-05-TC-08** | Tìm kiếm partial match | Hệ thống hiển thị thông báo "Network request timed out" | **Hỏng chức năng:** Tìm kiếm khớp một phần không hoạt động do API sập kết nối. |
+
+---
+
+### 💡 Phân tích kỹ thuật & Nhận xét tổng quan cho nhóm của bạn:
+
+1. **Về mặt kỹ thuật (Root Cause Analysis):** Tất cả các bug từ `BUG-01` đến `BUG-08` thực chất có chung một **"Gốc lỗi" (Root Cause)**. Backend API của nhóm bạn đang bị sập (Crash), hoặc địa chỉ IP cấu hình ở file Client Mobile (React Native/Expo) đang bị cấu hình sai (lệch IP của máy chạy server local), dẫn đến việc gửi request đi nhưng không có hồi đáp.
+2. **Cách tạo Issue hiệu quả trên Git:**
+Vì bạn đang tạo các issue trên [GitHub Issues của kho lưu trữ huiw14/KTPM-Eshop-Mobile](https://github.com/huiw14/KTPM-Eshop-Mobile/issues), thay vì tạo 8 ticket rời rạc có chung một mô tả lỗi gây loãng Git, bạn có thể cân nhắc gộp chúng lại hoặc ghi chú rõ: *"Hệ thống hỏng hoàn toàn API tìm kiếm và tải trang chủ do lỗi kết nối mạng"*. Việc đánh dấu `BUG-01` là **`CRITICAL`** sẽ giúp lập trình viên trong nhóm ưu tiên xử lý lỗi này đầu tiên để mở khóa cho các bước kiểm thử tiếp theo!
+
+## Prompt 33
+
+Time: 12:23 AM 4/7/2026
+
+Tool: Gemini
+
+*Prompt:
+
+
+*Phản hồi của AI:
+
+## Prompt 34
+
+Time: 12:23 AM 4/7/2026
+
+Tool: Gemini
+
+*Prompt:
+
+
+*Phản hồi của AI:
+
+## Prompt 35
+
 Time: 12:23 AM 4/7/2026
 
 Tool: Gemini

@@ -215,7 +215,6 @@
 | FR-04-TC-15 | DT-13 / BVA-10 | Address 1–500 ký tự hợp lệ | Full Name = "Nguyễn Văn K", Address = "123 Đường A, Q.1, TP.HCM" | **Success:** "Cập nhật thành công", Address = "123 Đường A, Q.1, TP.HCM" |
 | FR-04-TC-16 | DT-14 / BVA-11 | Address để trống (optional) | Full Name = "Nguyễn Văn L", Address = "" | **Success:** "Cập nhật thành công", Address = NULL/empty |
 | FR-04-TC-17 | DT-15 | Address chứa XSS payload | Full Name = "Nguyễn Văn M", Address = "<img src=x onerror=alert(1)>" | **Error:** Từ chối hoặc escape (bảo mật XSS) |
-| FR-04-TC-18 | DT-16 / BVA-13 | Address quá dài (max+1, 501 ký tự) | Full Name = "Nguyễn Văn N", Address = [501 ký tự] | **Error:** "Địa chỉ quá dài" |
 | FR-04-TC-19 | BVA-12 | Address tối đa hợp lệ (max, 500 ký tự) | Full Name = "Nguyễn Văn O", Address = [500 ký tự] | **Success:** Cập nhật hợp lệ |
 | FR-04-TC-20 | DT-17 / DT-19 | User đã đăng nhập, cập nhật hồ sơ của chính mình | Token hợp lệ, User_ID = 5, cập nhật User_ID = 5 | **Success:** "Cập nhật thành công" |
 | FR-04-TC-21 | DT-18 | User chưa đăng nhập | Không có Token, truy cập form | **Error/Redirect:** "Vui lòng đăng nhập" |
@@ -234,6 +233,7 @@
 * **Xử lý số điện thoại có chứa mã vùng quốc gia:** Copilot mặc định số điện thoại chỉ bắt đầu bằng số `0` (EC5, EC6). AI bỏ sót kịch bản người dùng nhập số điện thoại hợp lệ theo định dạng chuẩn quốc tế (Ví dụ: `+84987654321` hoặc `84987654321`), dẫn đến nguy cơ hệ thống đánh rớt nhầm các case dữ liệu chuẩn của người dùng.
 * **Xử lý khoảng trắng nghiệp vụ trong Họ Tên (Sanitization & Trim):** AI nhận diện lỗi họ tên rỗng nhưng bỏ sót lỗi định dạng khoảng trắng thực tế (Ví dụ: Tên có khoảng trắng thừa ở đầu/cuối `"  Nguyễn Văn A "` hoặc cách quãng bất thường `"Nguyễn   Văn   A"`). Thiếu kịch bản kiểm thử xem hệ thống có tự động tối ưu hóa dữ liệu chuỗi (trim/sanitize) trước khi ghi nhận vào Database hay không.
 * **Sự xung đột logic giữa Token và ID trong URL (Cross-Site Request Forgery / IDOR):** Mặc dù tại `EC20` có nhắc đến việc `User_ID từ Token ≠ User_ID trong URL`, AI chưa cụ thể hóa kịch bản kiểm thử việc **phân quyền chéo giữa các User thường với nhau**. Nếu một User A đã đăng nhập hợp lệ nhưng thay đổi ID trên URL/Payload thành ID của User B, hệ thống bảo mật ở Client hay API Gateway sẽ chặn? Kịch bản này cần được làm rõ ở cả tầng API Response Code (403 Forbidden hay 404 Not Found để giấu thông tin).
+* **Bỏ sót kịch bảng test cập nhật UI khi người dùng cập nhật thông tin thành công**: Khi người dùng cập nhật thành công và tên người dùng hiển thị ở góc trên bên phải màn hình có được cập nhật ngay không hay phải load lại trang, AI chưa đưa ra kịch bản để test UI này.
 
 ---
 
@@ -246,6 +246,16 @@
 
 ## 6. Bug Reporting
 
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **MAJOR** |  **FR-04-TC-01** | Cập nhật Họ Tên hợp lệ | `Full Name = "Trần Thị B"`, `Phone = ""`, `Address = ""` | Success: "Cập nhật thành công", Họ Tên = "Trần Thị B" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
+| **BUG-02** | **CRITICAL** | **FR-04-TC-03** | Họ Tên chứa XSS payload | `Full Name = "<script>alert(1)</script>"` | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống lưu thành công | **FAIL** |
+| **BUG-03** | **MEDIUM** | **FR-04-TC-04** | Họ Tên quá dài (max+1, 256 ký tự) | `Full Name = [256 ký tự]` | Error: "Họ Tên quá dài" | Hệ thống lưu thành công toàn bộ chuỗi 256 ký tự | **FAIL** |
+| **BUG-04** | **MAJOR** | **FR-04-TC-07** | Phone 10 chữ số, bắt đầu "0" (min hợp lệ) | `Phone = "0987654321"` | Success: "Cập nhật thành công", Phone = "0987654321" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
+| **BUG-05** | **MAJOR** | **FR-04-TC-08** | Phone 11 chữ số, bắt đầu "0" (max hợp lệ) | `Phone = "09876543210"` | Success: "Cập nhật thành công", Phone = "09876543210" | Hệ thống hiển thị thông báo "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." | **FAIL** |
+| **BUG-06** | **MAJOR** | **FR-04-TC-09** | Phone để trống (optional, min-1 nhưng Valid) | `Phone = ""` | Success: "Cập nhật thành công", Phone = NULL/empty | Hệ thống không chấp nhận để trống trường số điện thoại | **FAIL** |
+| **BUG-07** | **MEDIUM** | **FR-04-TC-10** | Phone không bắt đầu "0" (format error) | `Phone = "1987654321"` | Error: "Số điện thoại phải bắt đầu bằng 0" | Hệ thống báo cập nhật thành công | **FAIL** |
+| **BUG-08** | **CRITICAL** | **FR-04-TC-17** | Address chứa XSS payload | `Full Name = "Nguyễn Văn M"`, `Address = "<img src=x onerror=alert(1)>"` | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống chấp nhận bỏ trống trường địa chỉ chưa mã độc được mã hóa ký tự entities, không kích hoạt alert | **FAIL** |
 
 
 ---
@@ -400,7 +410,7 @@
 
 | TC ID | Nguồn Gốc (Coverage) | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi |
 | --- | --- | --- | --- | --- |
-| FR-07-TC-01 | DT-01 / BVA-01 | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) | Product_A, Qty=1, Price=50.000₫ | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] |
+| FR-07-TC-01 | DT-01 / BVA-01 | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) từ trang 'Xem chi tiết' của sản phẩm | Product_A, Qty=1, Price=50.000₫ | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] |
 | FR-07-TC-02 | DT-02 | Thêm sản phẩm với Qty=50 (giá trị trung bình) | Product_B, Qty=50, Price=30.000₫ | Giỏ: [Product_B \| 30.000₫ \| 50 \| 1.500.000₫] |
 | FR-07-TC-03 | DT-03 / BVA-02 | Nhập Qty=0 (biên không hợp lệ, $\min - 1$) | Product_C, Qty=0 | **Lỗi:** "Số lượng phải ≥ 1" |
 | FR-07-TC-04 | DT-04 | Nhập Qty=-5 (số âm) | Product_D, Qty=-5 | **Lỗi:** "Số lượng không hợp lệ" |
@@ -419,7 +429,7 @@
 | FR-07-TC-17 | DT-17 | Click "Tiếp tục mua sắm" (giỏ trống) | Giỏ trống; Click nút | Chuyển về trang chủ |
 | FR-07-TC-18 | DT-18 | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = **"Tổng cộng"** (chính xác, không phải "Tổng tạm tính") |
 | FR-07-TC-19 | BVA-03 / BVA-04 | Thêm sản phẩm với Qty=999 (biên trên hợp lệ) | Product_C, Qty=999, Price=10.000₫ | Qty=999, Thành tiền=9.990.000₫ (tính chính xác) |
-| FR-07-TC-20 | BVA-04 | Nhập Qty=1000 (biên trên không hợp lệ, $\max + 1$) | Product_D, Qty=1000 | **Lỗi:** "Tối đa 999" |
+| FR-07-TC-20 | DT-01 / BVA-01 | Thêm sản phẩm trực tiếp từ trang 'Danh sách sản phẩm' | Product_B, Qty=1, Price=30.000₫ | Giỏ: [Product_B \| 30.000₫ \| 1 \| 30.000₫] |
 | FR-07-TC-21 | BVA-06 | Xóa sản phẩm duy nhất → Giỏ trở về trống (edge transition) | 1 sản phẩm → Xóa → "Có" | Giỏ: [] (trống), hiển thị hình + "Giỏ hàng trống" |
 
 ---
@@ -444,11 +454,15 @@
 
 ## 6. Bug Reporting
 
-*Danh sách các lỗi phát hiện khi chạy thực tế:*
-
-| Bug ID | TC ID | Mức độ | Mô tả Lỗi | Hành động tái hiện | Kết quả thực tế | Kết quả mong đợi |
-| --- | --- | --- | --- | --- | --- | --- |
-| BUG-01 | FR-07-TC-XX | Critical/Major/Minor | [Mô tả ngắn gọn] | [Bước lặp lại] | [Sai sự thật] | [Đúng sự thật] |
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **MAJOR** | **FR-07-TC-01** | Thêm sản phẩm với Qty=1 (tối thiểu hợp lệ, biên dưới) từ trang 'Xem chi tiết' | `Product_A`, `Qty=1`, `Price=50.000₫` | Giỏ: [Product_A \| 50.000₫ \| 1 \| 50.000₫] | Hệ thống không hiển thị dòng sản phẩm vừa thêm vào giỏ hàng nếu chỉ nhấp vào nút lệnh 1 lần mà phải nhấp đúp 2 lần liên tục mới thêm vào giỏ | **FAIL** |
+| **BUG-02** | **CRITICAL** | **FR-07-TC-03** | Nhập Qty=0 (biên không hợp lệ, $min-1$) | `Product_C`, `Qty=0` | Lỗi: "Số lượng phải ≥ 1" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 0 | **FAIL** |
+| **BUG-03** | **CRITICAL** | **FR-07-TC-04** | Nhập Qty=-5 (số âm) | `Product_D`, `Qty=-5` | Lỗi: "Số lượng không hợp lệ" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là -5 | **FAIL** |
+| **BUG-04** | **MAJOR** | **FR-07-TC-05** | Nhập Qty=1500 (vượt phạm vi) | `Product_E`, `Qty=1500` | Lỗi: "Vượt giới hạn" | Hệ thống vẫn hiển thị dòng sản phẩm vừa thêm vào giỏ hàng với số lượng là 1500 | **FAIL** |
+| **BUG-05** | **MAJOR** | **FR-07-TC-08** | Thêm Product_A lần 2 (merge Qty, không tạo dòng mới) | Giỏ `[A, Qty=3]`; Thêm `A`, `Qty=2` | Giỏ: [Product_A, Qty=5] (1 dòng, merge thành công) | Tăng số dòng; dòng Product_A cũ không được cộng dồn số lượng lên | **FAIL** |
+| **BUG-06** | **MEDIUM** | **FR-07-TC-12** | Xóa sản phẩm + Xác nhận "Có" | Click Xóa `Product_A` → Dialog → "Có" | Product_A xóa, danh sách cập nhật, Tổng tiền recalc | Dòng sản phẩm biến mất lập tức, không có dialog xác nhận được hiện lên | **FAIL** |
+| **BUG-07** | **MINOR** | **FR-07-TC-18** | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = "Tổng cộng" (chính xác, không phải "Tổng tạm tính") | Giao diện ghi  chữ "Tổng tạm tính" không theo tiêu chuẩn đặc tả | **FAIL** |
 
 ---
 
@@ -628,19 +642,15 @@
 | FR-14-TC-06 | BVA-03 | Thêm danh mục với tên tối đa hợp lệ (max, 255 ký tự) | Category Name = [255 ký tự] | **Success:** Danh mục được thêm |
 | FR-14-TC-07 | DT-05 | Thêm danh mục với tên chỉ khoảng trắng | Category Name = "   " → Click "Lưu" | **Error:** "Tên danh mục không được để trống" (sau trim) |
 | FR-14-TC-08 | DT-06 | Thêm danh mục với tên trùng danh mục hiện có | DB: ["Điện tử"]; Nhập "Điện tử" | **Error:** "Tên danh mục đã tồn tại" |
-| FR-14-TC-09 | DT-07 | Thêm danh mục hợp lệ → Click "Lưu" | Category Name = "Thực phẩm" → Click "Lưu" | **Success:** Danh mục "Thực phẩm" được thêm, form reset |
-| FR-14-TC-10 | DT-08 | Nhập Tên không hợp lệ → Click "Lưu" → Validation | Category Name = "" → Click "Lưu" | **Validation Error:** Form không submit, hiển thị lỗi |
-| FR-14-TC-11 | DT-09 | Click "Thêm danh mục" → "Hủy" (không lưu) | Click "Hủy" | **Pass:** Form đóng, không thêm danh mục mới |
-| FR-14-TC-12 | DT-10 / BVA-05 | Xem danh sách danh mục (có dữ liệu) | Truy cập trang, danh sách có ≥1 danh mục | **Pass:** Hiển thị danh sách đầy đủ |
-| FR-14-TC-13 | DT-11 / BVA-06 | Xem danh sách danh mục (trống, edge transition) | Truy cập trang, DB: 0 danh mục | **Pass:** Empty state + "Chưa có danh mục" |
-| FR-14-TC-14 | DT-12 / BVA-07 | Xóa danh mục → Dialog → "Có" | Click Xóa [Danh mục A] → Click "Có" | **Success:** "Xóa danh mục thành công", Danh mục A xóa khỏi danh sách |
-| FR-14-TC-15 | DT-13 | Xóa danh mục → Dialog → "Không" (hủy xóa) | Click Xóa [Danh mục A] → Click "Không" | **Pass:** Dialog đóng, Danh mục A vẫn ở danh sách |
-| FR-14-TC-16 | DT-14 | Xóa danh mục có sản phẩm liên kết | DB: Danh mục A có 5 sản phẩm; Click Xóa | **TBD:** (a) Cascade delete; (b) Error "Có sản phẩm liên kết" |
-| FR-14-TC-17 | DT-15 | Admin đã đăng nhập → Truy cập trang | JWT Token: {role: "admin"} | **Success:** Truy cập trang quản lý danh mục |
-| FR-14-TC-18 | DT-16 | Admin chưa đăng nhập → Truy cập trang → Redirect | Không có Token | **Error/Redirect:** "Vui lòng đăng nhập" |
-| FR-14-TC-19 | DT-17 | User thường (role='user') → Truy cập trang admin | JWT Token: {role: "user"} | **Error:** 403 Forbidden, "Bạn không có quyền" |
-| FR-14-TC-20 | DT-18 | Mã danh mục (ID) hiển thị read-only | Xem form/danh sách, kiểm tra ID | **Pass:** ID disabled, không thể edit |
-| FR-14-TC-21 | DT-19 | Cố gắng thay đổi ID danh mục qua API | PUT /api/admin/categories/5 {id: 999} | **Error/No-op:** ID không thay đổi |
+| FR-14-TC-09 | DT-10 / BVA-05 | Xem danh sách danh mục (có dữ liệu) | Truy cập trang, danh sách có ≥1 danh mục | **Pass:** Hiển thị danh sách đầy đủ |
+| FR-14-TC-10 | DT-11 / BVA-06 | Xem danh sách danh mục (trống, edge transition) | Truy cập trang, DB: 0 danh mục | **Pass:** Empty state + "Chưa có danh mục" |
+| FR-14-TC-11 | DT-12 / BVA-07 | Xóa danh mục | Click Xóa [Danh mục A] | **Success:** "Xóa danh mục thành công", Danh mục A xóa khỏi danh sách |
+| FR-14-TC-12 | DT-14 | Xóa danh mục có sản phẩm liên kết | DB: Danh mục A có 5 sản phẩm; Click Xóa | **TBD:** (a) Cascade delete; (b) Error "Có sản phẩm liên kết" |
+| FR-14-TC-13 | DT-15 | Admin đã đăng nhập → Truy cập trang | JWT Token: {role: "admin"} | **Success:** Truy cập trang quản lý danh mục |
+| FR-14-TC-14 | DT-16 | Admin chưa đăng nhập → Truy cập trang → Redirect | Không có Token | **Error/Redirect:** "Vui lòng đăng nhập" |
+| FR-14-TC-15 | DT-17 | User thường (role='user') → Truy cập trang admin | JWT Token: {role: "user"} | **Error:** 403 Forbidden, "Bạn không phải là admin" |
+| FR-14-TC-16 | DT-18 | Mã danh mục (ID) hiển thị read-only | Xem form/danh sách, kiểm tra ID | **Pass:** ID disabled, không thể edit |
+| FR-14-TC-17 | DT-19 | Cố gắng thay đổi ID danh mục qua API | PUT /api/admin/categories/5 {id: 999} | **Error/No-op:** ID không thay đổi |
 
 ---
 
@@ -664,7 +674,13 @@
 
 ## 6. Bug Reporting
 
-
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **MAJOR** | **FR-14-TC-02** | Thêm danh mục với tên để trống (min-1, không hợp lệ) | `Category Name = ""` → Click "Lưu" | Error: "Tên danh mục không được để trống" | Danh mục vẫn được tạo nhưng không có tên và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-02** | **CRITICAL** | **FR-14-TC-03** | Thêm danh mục với tên chứa XSS payload | `Category Name = "<script>alert(1)</script>"` | Security Pass: Từ chối hoặc escape, không render HTML | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-03** | **MEDIUM** | **FR-14-TC-04** | Thêm danh mục với tên quá dài (max+1, 256 ký tự) | `Category Name = [256 ký tự]` | Error: "Tên danh mục quá dài" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-04** | **MAJOR** | **FR-14-TC-07** | Thêm danh mục với tên chỉ khoảng trắng | `Category Name = "   "` → Click "Lưu" | Error: "Tên danh mục không được để trống" (sau trim) | Danh mục vẫn được tạo nhưng không thấy tên và cập nhật real-time lên giao diện danh sách | **FAIL** |
+| **BUG-05** | **MAJOR** | **FR-14-TC-08** | Thêm danh mục với tên trùng danh mục hiện có | DB: `["Điện tử"]`; Nhập `"Điện tử"` | Error: "Tên danh mục đã tồn tại" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | **FAIL** |
 
 ---
 
@@ -679,8 +695,7 @@
 | **Tỷ lệ phủ BV** | 100% (7/7) |
 | **Số DT Case** | 19 |
 | **Số BVA Case** | 7 |
-| **Số TC sau tối ưu** | 21 (gộp các case DT+BVA trùng lặp) |
-| **Các TC gộp** | TC-02 (DT-02+BVA-02), TC-04 (DT-04+BVA-04), TC-12 (DT-10+BVA-05), TC-13 (DT-11+BVA-06), TC-14 (DT-12+BVA-07) |
+| **Số TC sau tối ưu** | 17 (gộp các case DT+BVA trùng lặp) |
 
 ---
 # Tính năng FR-05: Xem danh sách & Tìm kiếm sản phẩm (Mobile App)
@@ -909,9 +924,8 @@
 | FR-05-TC-24 | DT-24 | Grid responsive mobile (1–2 cột) | Mobile 375px width | Layout hợp lý, items readable |
 | FR-05-TC-25 | DT-25 | Grid responsive tablet (2–3 cột) | Tablet 768px width | Layout hợp lý, items readable |
 | FR-05-TC-26 | DT-26 | Page có đúng 1 `<h1>` (accessibility) | Inspect DOM | Chỉ 1 `<h1>` trên page |
-| FR-05-TC-27 | DT-27 | Page có 0 hoặc 2+ `<h1>` (a11y issue) | Inspect DOM | **Issue:** Nhiều hơn 1 hoặc không có `<h1>` |
-| FR-05-TC-28 | DT-28 / BVA-02 | Keyword max hợp lệ (255 ký tự) | Keyword = [255 ký tự] | Tìm kiếm hoạt động |
-| FR-05-TC-29 | DT-29 | Keyword được escape safe (XSS prevention) | Keyword = "<b>Test</b>" | HTML escaped: `&lt;b&gt;Test&lt;/b&gt;` |
+| FR-05-TC-27 | DT-28 / BVA-02 | Keyword max hợp lệ (255 ký tự) | Keyword = [255 ký tự] | Tìm kiếm hoạt động |
+| FR-05-TC-28 | DT-29 | Keyword được escape safe (XSS prevention) | Keyword = "<b>Test</b>" | HTML escaped: `&lt;b&gt;Test&lt;/b&gt;` |
 
 ---
 
@@ -934,7 +948,16 @@
 
 ## 6. Bug Reporting
 
-
+| Bug ID |  Mức độ (Severity) | TC ID | Mô tả Kịch Bản Chi Tiết | Dữ liệu đầu vào | Kết quả mong đợi | Kết quả thực tế | Trạng thái |
+| :---: | :---: | :---: | :--- | :--- | :--- | :--- |
+| **BUG-01** | **CRITICAL** | **FR-05-TC-01** | Truy cập trang chủ (không tìm kiếm, keyword min=0) | Không nhập keyword | Hiển thị tất cả sản phẩm dạng grid | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-02** | **MAJOR** | **FR-05-TC-02** | Tìm kiếm sản phẩm với keyword hợp lệ | `Keyword = "Điện thoại"` | Danh sách sản phẩm match "Điện thoại" hiển thị | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-03** | **MAJOR** | **FR-05-TC-03** | Tìm kiếm với XSS payload (security) | `Keyword = "<script>alert(1)</script>"` | Security: Payload escaped, không render HTML | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-04** | **MAJOR** | **FR-05-TC-04** | Tìm kiếm với ký tự đặc biệt | `Keyword = "@#$%^&*"` | Tìm kiếm hoạt động (hoặc không kết quả) | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-05** | **MAJOR** | **FR-05-TC-05** | Tìm kiếm không có kết quả (0 match) | `Keyword = "XYZ không tồn tại 123"` | Empty state: "Không tìm thấy sản phẩm" + Icon | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-06** | **MAJOR** | **FR-05-TC-06** | Tìm kiếm case-insensitive | `Keyword = "ĐIỆN THOẠI"` và `"điện thoại"` | Cả hai match "Điện thoại" (nếu support) | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-07** | **MAJOR** | **FR-05-TC-07** | Tìm kiếm quá dài (max+1=256 ký tự) | `Keyword = [256 ký tự]` | Từ chối, cắt bớt, hoặc không kết quả | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
+| **BUG-08** | **MAJOR** | **FR-05-TC-08** | Tìm kiếm partial match | `Keyword = "điện"` | Match "Điện thoại", "Điều hòa", ... | Hệ thống  hiển thị thông báo "Network request timed out" | **FAIL** |
 
 ---
 
@@ -949,7 +972,7 @@
 | **Tỷ lệ phủ BV** | 100% (14/14) |
 | **Số DT Case** | 29 |
 | **Số BVA Case** | 14 |
-| **Số TC sau tối ưu** | 29 (gộp các case DT+BVA trùng lặp) |
-| **Các TC gộp** | TC-01 (DT-01+BVA-01), TC-05 (DT-05+BVA-04), TC-07 (DT-07+BVA-03), TC-11 (DT-11+BVA-12), TC-12 (DT-12+BVA-13), TC-13 (DT-13+BVA-14), TC-17 (DT-17+BVA-06), TC-18 (DT-18+BVA-07), TC-21 (DT-21+BVA-08), TC-22 (DT-22+BVA-09), TC-28 (DT-29+BVA-02) |
+| **Số TC sau tối ưu** | 28 (gộp các case DT+BVA trùng lặp) |
+| **Các TC gộp** | TC-01 (DT-01+BVA-01), TC-05 (DT-05+BVA-04), TC-07 (DT-07+BVA-03), TC-11 (DT-11+BVA-12), TC-12 (DT-12+BVA-13), TC-13 (DT-13+BVA-14), TC-17 (DT-17+BVA-06), TC-18 (DT-18+BVA-07), TC-21 (DT-21+BVA-08), TC-22 (DT-22+BVA-09), TC-27 (DT-28+BVA-02) |
 
 ---
