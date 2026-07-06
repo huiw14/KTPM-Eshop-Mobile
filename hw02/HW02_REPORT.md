@@ -753,7 +753,7 @@
    - Hiển thị kết quả tìm kiếm (filter by name)
    - Từ khóa được escape (không render HTML)
 
-6. **Thẻ Heading (<h1>):**
+6. **Thẻ Heading (`<h1>`):**
    - Chỉ 1 `<h1>` duy nhất trên trang (accessibility requirement)
    - VD: `<h1>Danh sách sản phẩm</h1>` hoặc `<h1>Trang chủ</h1>`
 
