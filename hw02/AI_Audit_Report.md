@@ -2748,14 +2748,51 @@ Vì bạn đang tạo các issue trên [GitHub Issues của kho lưu trữ huiw1
 
 ## Prompt 33
 
-Time: 12:23 AM 4/7/2026
+Time: 6:08 AM 7/7/2026
 
 Tool: Gemini
 
 *Prompt:
-
+từ Test_log.md này hãy tổng hợp các nội dung: a test summary report: number of features; number of test cases designed,
+executed, passed, failed, and not yet executed; number of bugs; and
+demo videos.
 
 *Phản hồi của AI:
+Dựa trên dữ liệu thực tế từ file [Test_log.md](https://github.com/huiw14/KTPM-Eshop-Mobile/blob/Nhu/hw02/Test_log.md) đang hiển thị trên màn hình của bạn, dưới đây là phần tổng hợp **Test Summary Report** được chuẩn hóa theo đúng cấu trúc yêu cầu của tài liệu [2026.HW02.Domain Testing_En.pdf](https://drive.google.com/drive/folders/14jM9xf0VaZVRq3Ls8aYOdcFxMihbp4e3):
+
+---
+
+### 📊 1. TEST SUMMARY REPORT
+
+* **Number of features:** 4 (`FR-04`, `FR-07`, `FR-14`, `FR-05`)
+* **Total Test Cases Designed:** 94
+* **Test Cases Executed:** 94
+* **Test Cases Passed:** 43
+* **Test Cases Failed:** 48
+* **Test Cases Not Yet Executed:** 0 *(Tất cả các ca kiểm thử đều đã được chạy và ghi nhận trạng thái)*
+* **Test Cases Blocked:** 3 *(Bao gồm `FR-07-TC-13` và các case liên quan đến dữ liệu hiển thị do lỗi nghẽn)*
+* **Total Bugs Found:** 48 *(Tương ứng với số lượng ca kiểm thử có trạng thái `FAIL` đã được nhóm bạn đẩy lên [GitHub Issues](https://github.com/huiw14/KTPM-Eshop-Mobile/issues?q=is%3Aissue%20state%3Aopen%2005))*
+* **Demo Videos (Agent Skills):** [Chèn link YouTube quay end-to-end quá trình chạy thử nghiệm của bạn tại đây]
+
+---
+
+### 📉 2. CHI TIẾT SỐ LIỆU THEO TỪNG TÍNH NĂNG (FEATURE BREAKDOWN)
+
+Để báo cáo của bạn có chiều sâu và thuyết phục các thầy cô chấm bài, bạn nên đính kèm thêm bảng số liệu phân rã chi tiết này ngay dưới phần tổng quan:
+
+| Feature ID | Tên Tính Năng | Số TC Thiết Kế | Executed | Passed | Failed | Blocked | Số Bug Phát Hiện |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| **FR-04** | Quản lý hồ sơ cá nhân | 25 | 25 | 16 | 9 | 0 | 9 |
+| **FR-07** | Giỏ hàng | 21 | 21 | 13 | 7 | 1 | 7 |
+| **FR-14** | Quản lý Danh mục (CRUD) | 17 | 17 | 12 | 5 | 0 | 5 |
+| **FR-05** | Xem danh sách & Tìm kiếm | 31 | 31 | 2 | 27 | 2 | 27 |
+| **Tổng** | **4 Chức năng** | **94** | **94** | **43** | **48** | **3** | **48** |
+
+---
+
+### 💡 Gợi ý cho bạn:
+
+Đoạn mã Markdown trên đã sẵn sàng để bạn sao chép trực tiếp vào mục **1. Test Summary Report** trong file `README.md` báo cáo chung của bạn giống như cấu trúc mẫu của bạn Minh trong nhóm. Hãy nhớ bổ sung link video thực nghiệm Agent Skill (nếu có) vào dòng cuối cùng nhé!
 
 ## Prompt 34
 
