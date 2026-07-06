@@ -258,21 +258,6 @@
 | BUG-08 | CRITICAL | FR-04-TC-17 | Address chứa XSS payload | Full Name = "Nguyễn Văn M", Address = "<img src=x onerror=alert(1)>" | Error: Từ chối hoặc escape (bảo mật XSS) | Hệ thống chấp nhận bỏ trống trường địa chỉ chưa mã độc được mã hóa ký tự entities, không kích hoạt alert | FAIL |
 
 
----
-
-## 7. Tóm tắt Kế hoạch Kiểm thử
-
-| Chỉ số | Giá trị |
-| --- | --- |
-| **Tổng Test Case cuối (TC)** | 26 |
-| **Equivalence Classes (EC)** | 24 |
-| **Boundary Value Points (BV)** | 13 |
-| **Tỷ lệ phủ EC** | 100% (24/24) |
-| **Tỷ lệ phủ BV** | 100% (13/13) |
-| **Số DT Case** | 24 |
-| **Số BVA Case** | 13 |
-| **Số TC sau tối ưu** | 26 (gộp các case DT+BVA trùng lặp) |
-
 
 ---
 # Tính năng FR-07: Giỏ hàng (Shopping Cart)
@@ -464,18 +449,7 @@
 | BUG-06 | MEDIUM | FR-07-TC-12 | Xóa sản phẩm + Xác nhận "Có" | Click Xóa Product_A → Dialog → "Có" | Product_A xóa, danh sách cập nhật, Tổng tiền recalc | Dòng sản phẩm biến mất lập tức, không có dialog xác nhận được hiện lên | FAIL |
 | BUG-07 | MINOR | FR-07-TC-18 | Kiểm tra nhãn "Tổng cộng" (chính xác) | Giỏ có sản phẩm → Xem nhãn | Nhãn = "Tổng cộng" (chính xác, không phải "Tổng tạm tính") | Giao diện ghi chữ "Tổng tạm tính" không theo tiêu chuẩn đặc tả | FAIL |
 
----
 
-## 7. Tóm tắt Kế hoạch Kiểm thử
-
-| Chỉ số | Giá trị |
-| --- | --- |
-| **Tổng Test Case cuối (TC)** | 21 |
-| **Equivalence Classes (EC)** | 20 |
-| **Boundary Value Points (BV)** | 8 |
-| **Tỷ lệ phủ EC** | 100% (20/20) |
-| **Tỷ lệ phủ BV** | 100% (8/8) |
-| **Số TC trùng lặp được loại** | DT-01+BVA-01 → TC-01; DT-03+BVA-02 → TC-03; v.v. |
 
 ---
 
@@ -682,20 +656,7 @@
 | BUG-04 | MAJOR | FR-14-TC-07 | Thêm danh mục với tên chỉ khoảng trắng | Category Name = "   " → Click "Lưu" | Error: "Tên danh mục không được để trống" (sau trim) | Danh mục vẫn được tạo nhưng không thấy tên và cập nhật real-time lên giao diện danh sách | FAIL |
 | BUG-05 | MAJOR | FR-14-TC-08 | Thêm danh mục với tên trùng danh mục hiện có | DB: ["Điện tử"]; Nhập "Điện tử" | Error: "Tên danh mục đã tồn tại" | Danh mục vẫn được tạo và cập nhật real-time lên giao diện danh sách | FAIL |
 
----
 
-## 7. Tóm tắt Kế hoạch Kiểm thử
-
-| Chỉ số | Giá trị |
-| --- | --- |
-| **Tổng Test Case cuối (TC)** | 21 |
-| **Equivalence Classes (EC)** | 19 |
-| **Boundary Value Points (BV)** | 7 |
-| **Tỷ lệ phủ EC** | 100% (19/19) |
-| **Tỷ lệ phủ BV** | 100% (7/7) |
-| **Số DT Case** | 19 |
-| **Số BVA Case** | 7 |
-| **Số TC sau tối ưu** | 17 (gộp các case DT+BVA trùng lặp) |
 
 ---
 # Tính năng FR-05: Xem danh sách & Tìm kiếm sản phẩm (Mobile App)
@@ -959,20 +920,6 @@
 | BUG-07 | MAJOR | FR-05-TC-07 | Tìm kiếm quá dài (max+1=256 ký tự) | Keyword = [256 ký tự] | Từ chối, cắt bớt, hoặc không kết quả | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
 | BUG-08 | MAJOR | FR-05-TC-08 | Tìm kiếm partial match | Keyword = "điện" | Match "Điện thoại", "Điều hòa", ... | Hệ thống hiển thị thông báo "Network request timed out" | FAIL |
 
----
 
-## 7. Tóm tắt Kế hoạch Kiểm thử
-
-| Chỉ số | Giá trị |
-| --- | --- |
-| **Tổng Test Case cuối (TC)** | 29 |
-| **Equivalence Classes (EC)** | 29 |
-| **Boundary Value Points (BV)** | 14 |
-| **Tỷ lệ phủ EC** | 100% (29/29) |
-| **Tỷ lệ phủ BV** | 100% (14/14) |
-| **Số DT Case** | 29 |
-| **Số BVA Case** | 14 |
-| **Số TC sau tối ưu** | 28 (gộp các case DT+BVA trùng lặp) |
-| **Các TC gộp** | TC-01 (DT-01+BVA-01), TC-05 (DT-05+BVA-04), TC-07 (DT-07+BVA-03), TC-11 (DT-11+BVA-12), TC-12 (DT-12+BVA-13), TC-13 (DT-13+BVA-14), TC-17 (DT-17+BVA-06), TC-18 (DT-18+BVA-07), TC-21 (DT-21+BVA-08), TC-22 (DT-22+BVA-09), TC-27 (DT-28+BVA-02) |
 
 ---
