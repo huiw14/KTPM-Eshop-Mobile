@@ -24,5 +24,5 @@ Nguyễn Hoàng Uyển Như - 22127315
 * **Test Cases Not Yet Executed:** 0 
 * **Test Cases Blocked:** 18
 * **Total Bugs Found:** 28
-* **Demo Videos (Agent Skills):** 
+* **Demo Videos (Agent Skills):** https://www.youtube.com/watch?feature=shared&v=btxuU4ujgqI
 
