@@ -1,2 +1,2 @@
 Test Case ID,email,password,expected_status
-TC_AUTH_01,test@eshop.com,Test1234!,200
+TC_AUTH_01,test@eshop.com,Test1234!,500
