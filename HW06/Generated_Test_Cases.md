@@ -1,7 +1,7 @@
 Quy ước: `200/201` là phản hồi thành công tùy implementation; dữ liệu `{valid...}` là dữ liệu hợp lệ đã tạo sẵn, `USER_TOKEN` là token user thường và `ADMIN_TOKEN` là token admin. Các test schema xác nhận cả mã HTTP, kiểu dữ liệu, trường bắt buộc và không có trường ngoài hợp đồng.
 
-| Test Case ID | Description | Payload/Steps | Expected Result |
-|---|---|---|---|
+| Test Case ID | Description | Payload/Steps | Expected Result | Status | Reason |
+|---|---|---|---|---|---|
 | TC-001 | Đăng ký với dữ liệu hợp lệ | `POST /api/register` với `name="Nguyen Van A"`, email hợp lệ, password `Password123!` | `200/201`; tạo đúng một user; response có `message` và `id` là number. |
 | TC-002 | Partition name rỗng/thiếu | Gửi `{ "email":"new@test.com", "password":"Password123!" }`, sau đó `name:""` | `400`; báo thiếu hoặc không hợp lệ; không tạo user. |
 | TC-003 | Partition email | Lần lượt email thiếu `@`, rỗng, thiếu field, và email hợp lệ có dấu `+` | Chỉ email đúng format được chấp nhận; lỗi trả `4xx` theo schema; không lộ SQL/database error. |
