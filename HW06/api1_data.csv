@@ -1,5 +1,5 @@
 Test Case ID,email,password,expected_status
-TC_AUTH_01,valid_user@domain.com,Password123!,200
+TC_AUTH_01,test@eshop.com,Test1234!,200
 TC_AUTH_02,admin@domain.com,AdminPassword123!,200
 TC_AUTH_03,user.name+tag@sub.domain.co,Password123!,200
 TC_AUTH_04,VALID_USER@DOMAIN.COM,Password123!,200
