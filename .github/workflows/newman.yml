@@ -5,14 +5,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+
+      - name: Setup and Run EShop Backend
+        run: |
+          git clone https://github.com/ttbhanh/eshop-sut.git
+          cd eshop-sut/backend
+          npm install
+          node database.js
+          node server.js &
+          sleep 5
+
       - name: Install Newman
         run: npm install -g newman newman-reporter-htmlextra
+
       - name: Run Newman API Tests
-        run: newman run collection.json -r htmlextra
+        run: newman run collection.json -d postman_data.csv -r htmlextra
+
       - name: Upload Report
         uses: actions/upload-artifact@v3
         if: always()
