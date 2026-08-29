@@ -280,6 +280,21 @@ tôi bắt buộc phải commit cả file `backend/package-lock.json`   à
 - **Kiểm tra của con người:** Chỉ stage `backend/package-lock.json`, workflow và các artifact HW06 liên quan; không stage `backend/database.sqlite` nếu đó là thay đổi dữ liệu cục bộ không cần nộp.
 - **Hành động:** Ghi nhận hướng dẫn commit an toàn; không tự commit/push.
 
+## AI-018 - Hướng dẫn hoàn tất hai bằng chứng CI/CD
+
+- **Thời điểm (UTC+07:00):** 2026-08-30 06:38
+- **Công cụ/mô hình:** Codex (GPT-5)
+- **Mục đích:** Hướng dẫn chi tiết tạo run pass và run fail có chủ ý trên GitHub Actions.
+- **Prompt nguyên văn:**
+
+```text
+ok pass được cái đầu tiên, giờ làm gì tiếp đây, hướng dẫn chi tiết từng bước , từng vị trí để thực hiện nhé
+```
+
+- **Câu trả lời của AI:** Đã xác nhận workflow hiện tại hỗ trợ hai cách tạo run fail: chạy thủ công `failing-demo` hoặc push commit có marker `[ci-fail-demo]`. Vì nút Run workflow có thể chưa hiện trên nhánh hiện tại, AI hướng dẫn dùng commit marker: lưu link/screenshot run xanh trước; tạo một file ghi chú vô hại trong `hw06`, commit với message chứa marker, push và chụp run đỏ. Sau đó điền SHA/link/đường dẫn screenshot vào `CI_CD_Report.md`. AI nhắc không commit `backend/database.sqlite`, hiện là thay đổi cục bộ duy nhất không liên quan.
+- **Kiểm tra của con người:** Sinh viên cần tự tạo ảnh chụp GitHub Actions thật và xác nhận run đỏ là demo test cố ý fail, không phải bug SUT.
+- **Hành động:** Cung cấp quy trình thao tác; không tự commit/push.
+
 ## Mẫu cho tương tác tiếp theo
 
 ## AI-XXX - _tên ngắn gọn_
