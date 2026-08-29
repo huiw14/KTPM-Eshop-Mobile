@@ -20,7 +20,7 @@ Pipeline chạy khi push thay đổi liên quan hoặc chạy thủ công từ G
 - Workflow run link: _Chưa có_
 - Screenshot: _Chụp trang GitHub Actions sau khi run pass_
 - Collection: `hw06/postman/ESHOP_HW06_CI_Passing.postman_collection.json`
-- Cách chạy: push commit, hoặc vào **Actions → HW06 API Tests → Run workflow → suite: passing**.
+- Cách chạy: push một commit có message bình thường, ví dụ `ci: verify HW06 API tests passing`. Hoặc sau khi workflow đã có trên default branch: **Actions → HW06 API Tests → Run workflow → suite: passing**.
 
 ### Run 2 - Cố ý có một test fail
 
@@ -28,7 +28,7 @@ Pipeline chạy khi push thay đổi liên quan hoặc chạy thủ công từ G
 - Workflow run link: _Chưa có_
 - Screenshot: _Chụp trang GitHub Actions sau khi run fail_
 - Collection: `hw06/postman/ESHOP_HW06_CI_Failing_Demo.postman_collection.json`
-- Cách chạy: tạo một commit mới, sau đó vào **Actions → HW06 API Tests → Run workflow → suite: failing-demo**. Test duy nhất cố ý kỳ vọng HTTP `201` trong khi `GET /api/products` thực tế trả `200`; không dùng case này để báo lỗi SUT.
+- Cách chạy không cần nút Run workflow: tạo/push một commit có đúng marker `[ci-fail-demo]` trong commit message, ví dụ `ci: [ci-fail-demo] demonstrate one failing test`. Hoặc sau khi workflow đã có trên default branch: **Actions → HW06 API Tests → Run workflow → suite: failing-demo**. Test duy nhất cố ý kỳ vọng HTTP `201` trong khi `GET /api/products` thực tế trả `200`; không dùng case này để báo lỗi SUT.
 
 ## Lưu ý trung thực
 

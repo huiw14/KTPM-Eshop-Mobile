@@ -250,6 +250,21 @@ làm tiếp bước này đi
 - **Kiểm tra của con người:** Trước khi nộp, push workflow lên GitHub, mở Actions chạy `passing` và `failing-demo`, chụp mỗi run và dán link/commit SHA vào `CI_CD_Report.md`.
 - **Hành động:** Tạo pipeline artifacts và xác minh cục bộ pass suite; không push hoặc commit thay sinh viên.
 
+## AI-016 - Hướng dẫn xử lý GitHub Actions fail và Run workflow
+
+- **Thời điểm (UTC+07:00):** 2026-08-30 04:37
+- **Công cụ/mô hình:** Codex (GPT-5)
+- **Mục đích:** Giải thích run CI thất bại và vị trí nút chạy workflow thủ công.
+- **Prompt nguyên văn:**
+
+```text
+sao mới commit lên là fail luôn, giờ chạy tiếp sao, tôi không thấy nút run workflow
+```
+
+- **Câu trả lời của AI:** Ảnh chỉ cho thấy job `newman` thất bại, không hiển thị step/log nên chưa thể kết luận nguyên nhân chính xác. Cần bấm job `newman` ở panel trái, mở step màu đỏ đầu tiên và chụp/dán log. Nút `Run workflow` không có ở trang chi tiết run; phải quay về trang workflow bằng breadcrumb `HW06 API Tests` hoặc Actions → chọn workflow. Repository remote có default branch `main`, trong khi run được push từ branch `Nhu`; GitHub chỉ hiển thị manual dispatch đáng tin cậy khi file workflow đã tồn tại trên default branch. Cần merge/push workflow vào `main`, rồi mở workflow chính để chọn `passing` hoặc `failing-demo`.
+- **Kiểm tra của con người:** Không tạo kết quả workflow mới. Sinh viên cần cung cấp log step lỗi để AI sửa nguyên nhân thay vì đoán.
+- **Hành động:** Ghi nhận hướng dẫn và điều kiện branch cho workflow_dispatch.
+
 ## Mẫu cho tương tác tiếp theo
 
 ## AI-XXX - _tên ngắn gọn_

@@ -21,8 +21,6 @@ jobs:
   newman:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      SUITE: ${{ inputs.suite || 'passing' }}
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
@@ -46,7 +44,7 @@ jobs:
           done
 
       - name: Run Newman passing suite
-        if: env.SUITE == 'passing'
+        if: ${{ (github.event_name == 'push' && !contains(github.event.head_commit.message, '[ci-fail-demo]')) || (github.event_name == 'workflow_dispatch' && inputs.suite == 'passing') }}
         run: >
           npx --yes --package=newman newman run
           hw06/postman/ESHOP_HW06_CI_Passing.postman_collection.json
@@ -55,7 +53,7 @@ jobs:
           --reporter-json-export hw06/newman-reports/CI_Passing_Newman.json
 
       - name: Run intentionally failing demonstration
-        if: env.SUITE == 'failing-demo'
+        if: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[ci-fail-demo]')) || (github.event_name == 'workflow_dispatch' && inputs.suite == 'failing-demo') }}
         run: >
           npx --yes --package=newman newman run
           hw06/postman/ESHOP_HW06_CI_Failing_Demo.postman_collection.json
@@ -67,7 +65,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: newman-${{ env.SUITE }}-${{ github.run_number }}
+          name: newman-${{ github.run_number }}
           path: |
             hw06/newman-reports/*.json
             backend.log
