@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><title>HW06 Newman Report - 22127315</title>
+<style>body{font-family:Arial,sans-serif;max-width:1200px;margin:32px auto;color:#172033;padding:0 16px}h1{margin-bottom:4px}.meta{color:#536174}.cards{display:flex;gap:12px;margin:24px 0;flex-wrap:wrap}.card{border:1px solid #d8dee9;border-radius:8px;padding:16px;min-width:160px}.card b{font-size:28px;display:block}.pass{background:#effaf3}.fail{background:#fff0f0}table{border-collapse:collapse;width:100%;margin:12px 0 28px}th,td{border:1px solid #d8dee9;padding:9px;text-align:left;vertical-align:top}th{background:#f4f7fb}code{background:#f2f4f8;padding:2px 4px;border-radius:3px}.note{padding:12px;background:#fff8e6;border-left:4px solid #e0a400}</style>
+</head><body>
+<h1>HW06 - Newman API Test Report</h1>
+<p class="meta">MSSV: <b>22127315</b> · SUT: <code>http://127.0.0.1:3000</code> · Sinh từ dữ liệu Newman JSON thực tế.</p>
+<div class="cards"><div class="card"><span>Requests</span><b>15</b></div><div class="card"><span>Assertions</span><b>31</b></div><div class="card pass"><span>Assertions pass</span><b>29</b></div><div class="card fail"><span>Assertions fail</span><b>2</b></div></div>
+<div class="note">Mọi request trong lần chạy có header <code>X-Student-Id</code>. Bảng không hiển thị Authorization token để tránh lộ thông tin xác thực. Assertion fail là phát hiện cần tái hiện và audit, chưa tự động là bug đã xác nhận.</div>
+<h2>Kết quả theo request</h2><table><thead><tr><th>Request</th><th>HTTP</th><th>Thời gian</th><th>X-Student-Id</th><th>Assertions pass/tổng</th></tr></thead><tbody><tr class="pass"><td>Đăng nhập Admin</td><td>200</td><td>44 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>Đăng nhập User</td><td>200</td><td>8 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>DP-FR05-01 - Danh sách không query</td><td>200</td><td>3 ms</td><td>22127315</td><td>4/4</td></tr>
+<tr class="pass"><td>DP-FR05-03 - Search khớp một phần</td><td>200</td><td>5 ms</td><td>22127315</td><td>3/3</td></tr>
+<tr class="pass"><td>DP-FR05-09 - Search không khớp</td><td>200</td><td>5 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="fail"><td>SEC-SQL-01 - SQL injection trong search</td><td>200</td><td>6 ms</td><td>22127315</td><td>1/2</td></tr>
+<tr class="pass"><td>ST-FR08-01 - Checkout hợp lệ tạo pending order</td><td>200</td><td>14 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>ST-FR08-02 - Order history giữ pending</td><td>200</td><td>6 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>SCH-FR08-02 - Checkout không token</td><td>401</td><td>7 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>ST-FR08-05 - Hủy pending order</td><td>200</td><td>16 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="fail"><td>SEC-RBAC-01 - Create product không token bị từ chối</td><td>200</td><td>15 ms</td><td>22127315</td><td>0/1</td></tr>
+<tr class="pass"><td>ST-FR15-01 - Admin tạo product</td><td>200</td><td>13 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>ST-FR15-02 - Admin cập nhật product</td><td>200</td><td>13 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>ST-FR15-05 - Admin xóa product</td><td>200</td><td>11 ms</td><td>22127315</td><td>2/2</td></tr>
+<tr class="pass"><td>Cleanup - Xóa product tạo trái phép nếu có</td><td>200</td><td>10 ms</td><td>22127315</td><td>1/1</td></tr></tbody></table>
+<h2>Assertion thất bại</h2><table><thead><tr><th>Request</th><th>Loại lỗi</th><th>Chi tiết</th></tr></thead><tbody><tr><td>SEC-SQL-01 - SQL injection trong search</td><td>AssertionError</td><td>expected 5 to be below 5</td></tr>
+<tr><td>SEC-RBAC-01 - Create product không token bị từ chối</td><td>AssertionError</td><td>expected 200 to be one of [ 401, 403 ]</td></tr></tbody></table>
+<h2>Nguồn bằng chứng</h2><p>JSON gốc: <code>HW06_Newman_Run_22127315.json</code>. Collection và Environment Postman được lưu trong thư mục <code>hw06/postman</code>.</p>
+</body></html>

@@ -1,0 +1,74 @@
+name: HW06 API Tests
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - 'hw06/**'
+      - '.github/workflows/hw06-api-tests.yml'
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Chọn bộ test CI'
+        required: true
+        default: passing
+        type: choice
+        options:
+          - passing
+          - failing-demo
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SUITE: ${{ inputs.suite || 'passing' }}
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Start EShop backend
+        working-directory: backend
+        run: |
+          node server.js > ../backend.log 2>&1 &
+          for attempt in {1..20}; do
+            curl --fail --silent http://127.0.0.1:3000/api/products && break
+            sleep 1
+          done
+
+      - name: Run Newman passing suite
+        if: env.SUITE == 'passing'
+        run: >
+          npx --yes --package=newman newman run
+          hw06/postman/ESHOP_HW06_CI_Passing.postman_collection.json
+          -e hw06/postman/ESHOP_HW06_22127315.postman_environment.json
+          -r cli,json
+          --reporter-json-export hw06/newman-reports/CI_Passing_Newman.json
+
+      - name: Run intentionally failing demonstration
+        if: env.SUITE == 'failing-demo'
+        run: >
+          npx --yes --package=newman newman run
+          hw06/postman/ESHOP_HW06_CI_Failing_Demo.postman_collection.json
+          -e hw06/postman/ESHOP_HW06_22127315.postman_environment.json
+          -r cli,json
+          --reporter-json-export hw06/newman-reports/CI_Failing_Demo_Newman.json
+
+      - name: Upload Newman evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-${{ env.SUITE }}-${{ github.run_number }}
+          path: |
+            hw06/newman-reports/*.json
+            backend.log
+          if-no-files-found: warn

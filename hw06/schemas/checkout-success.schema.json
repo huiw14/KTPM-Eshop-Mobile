@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Checkout success response (schema suy luận)",
+  "type": "object",
+  "required": ["message", "orderId"],
+  "properties": {
+    "message": { "type": "string" },
+    "orderId": { "type": "integer", "minimum": 1 }
+  },
+  "additionalProperties": false
+}

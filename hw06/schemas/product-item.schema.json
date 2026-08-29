@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product item response (schema suy luận)",
+  "type": "object",
+  "required": ["id", "name", "price", "description", "imageUrl", "category_id"],
+  "properties": {
+    "id": { "type": "integer", "minimum": 1 },
+    "name": { "type": "string" },
+    "price": { "type": "number" },
+    "description": { "type": ["string", "null"] },
+    "imageUrl": { "type": ["string", "null"] },
+    "category_id": { "type": ["integer", "null"] }
+  },
+  "additionalProperties": false
+}

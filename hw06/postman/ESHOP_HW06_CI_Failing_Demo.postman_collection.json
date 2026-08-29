@@ -1,0 +1,7 @@
+{
+  "info": {"name": "HW06 CI - Intentional Failure Demonstration", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "event": [{"listen": "prerequest", "script": {"type": "text/javascript", "exec": ["pm.request.headers.upsert({ key: 'X-Student-Id', value: pm.environment.get('studentId') || '22127315' });"]}}],
+  "item": [
+    {"name": "DEMO - Deliberately failing assertion", "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/products"}, "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["pm.test('DEMO ONLY: expect an incorrect status to show CI failure', () => pm.response.to.have.status(201));"]}}]}
+  ]
+}

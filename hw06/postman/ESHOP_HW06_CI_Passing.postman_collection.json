@@ -1,0 +1,9 @@
+{
+  "info": {"name": "HW06 CI - Passing API Suite", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "event": [{"listen": "prerequest", "script": {"type": "text/javascript", "exec": ["pm.request.headers.upsert({ key: 'X-Student-Id', value: pm.environment.get('studentId') || '22127315' });"]}}],
+  "item": [
+    {"name": "FR05 - List products", "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/products"}, "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.test('JSON array', () => pm.expect(pm.response.json()).to.be.an('array'));"]}}]},
+    {"name": "FR05 - Search products", "request": {"method": "GET", "header": [], "url": "{{baseUrl}}/api/products?search=iPhone"}, "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["pm.test('HTTP 200', () => pm.response.to.have.status(200));", "pm.test('Search JSON array', () => pm.expect(pm.response.json()).to.be.an('array'));"]}}]},
+    {"name": "FR08 - Checkout requires authentication", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"total_amount\":200000,\"shipping_address\":\"123 Le Loi, Q1\"}"}, "url": "{{baseUrl}}/api/checkout"}, "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": ["pm.test('HTTP 401', () => pm.response.to.have.status(401));", "pm.test('JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"]}}]}
+  ]
+}
