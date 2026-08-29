@@ -265,6 +265,21 @@ sao mới commit lên là fail luôn, giờ chạy tiếp sao, tôi không thấ
 - **Kiểm tra của con người:** Không tạo kết quả workflow mới. Sinh viên cần cung cấp log step lỗi để AI sửa nguyên nhân thay vì đoán.
 - **Hành động:** Ghi nhận hướng dẫn và điều kiện branch cho workflow_dispatch.
 
+## AI-017 - Làm rõ việc commit package-lock cho CI
+
+- **Thời điểm (UTC+07:00):** 2026-08-30 04:37
+- **Công cụ/mô hình:** Codex (GPT-5)
+- **Mục đích:** Giải thích file nào cần commit để sửa CI lỗi `npm ci`.
+- **Prompt nguyên văn:**
+
+```text
+tôi bắt buộc phải commit cả file `backend/package-lock.json`   à
+```
+
+- **Câu trả lời của AI:** Có, nếu workflow tiếp tục dùng `npm ci` - cách phù hợp để cài dependency tái lập trong CI. Log GitHub cho thấy `backend/package-lock.json` thiếu `picomatch@4.0.7`; nếu không commit lockfile đã sửa thì runner vẫn fail trước khi chạy Newman. Lựa chọn thay thế là đổi workflow sang `npm install`, nhưng không khuyến nghị vì dependency có thể thay đổi giữa các lần chạy và làm bằng chứng CI kém tin cậy.
+- **Kiểm tra của con người:** Chỉ stage `backend/package-lock.json`, workflow và các artifact HW06 liên quan; không stage `backend/database.sqlite` nếu đó là thay đổi dữ liệu cục bộ không cần nộp.
+- **Hành động:** Ghi nhận hướng dẫn commit an toàn; không tự commit/push.
+
 ## Mẫu cho tương tác tiếp theo
 
 ## AI-XXX - _tên ngắn gọn_
