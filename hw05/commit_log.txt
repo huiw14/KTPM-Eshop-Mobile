@@ -1,0 +1,27 @@
+883bc47 - nhun020104, 3 minutes ago : create hw05
+06e6a62 - nhun020104, 7 weeks ago : create git_commit_log
+e23d4f8 - nhun020104, 7 weeks ago : cập nhật README.md
+e2c0b2c - nhun020104, 7 weeks ago : tạo AI Critique
+cb7806e - nhun020104, 7 weeks ago : hoàn thành README.md
+27c72d3 - nhun020104, 7 weeks ago : edit REPORT
+200a686 - nhun020104, 7 weeks ago : trình bày báo cáo
+bec7731 - nhun020104, 7 weeks ago : cập nhật Bug reporting
+101964c - nhun020104, 7 weeks ago : Bug Reporting
+9d7c28e - nhun020104, 7 weeks ago : bảng ghi Test_log
+bf36840 - nhun020104, 7 weeks ago : create agent skill
+931c474 - nhun020104, 7 weeks ago : báo cáo lý thuyết cho 4 chức năng
+0d641d9 - nhun020104, 7 weeks ago : tạo file báo cáo
+bff5f25 - huiw14, 7 weeks ago : chore: cleanup
+a49f534 - huiw14, 8 weeks ago : doc: final reports
+4e83316 - huiw14, 8 weeks ago : doc: report fr-04 android
+28891fc - huiw14, 8 weeks ago : task: finish fr-16, starting fr-04 android
+8d13fc9 - huiw14, 8 weeks ago : test: fr-16-dt-01,02
+9da6139 - huiw14, 8 weeks ago : doc: fr-16
+aec1fe7 - huiw14, 8 weeks ago : task: finish fr-08
+942576d - huiw14, 8 weeks ago : test: all fr-08
+70de1c7 - huiw14, 8 weeks ago : doc: report and audit for fr-08
+053567d - huiw14, 8 weeks ago : task: finish fr-06, start fr-08
+8ed7f09 - huiw14, 8 weeks ago : test: fr-06-dt-01, 02, 03, 04
+e432522 - huiw14, 8 weeks ago : doc: audit for fr-06
+092eb9d - huiw14, 8 weeks ago : init: setting up agent skill
+befd632 - huiw14, 3 months ago : Initial commit
