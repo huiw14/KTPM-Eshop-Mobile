@@ -295,6 +295,36 @@ ok pass được cái đầu tiên, giờ làm gì tiếp đây, hướng dẫn 
 - **Kiểm tra của con người:** Sinh viên cần tự tạo ảnh chụp GitHub Actions thật và xác nhận run đỏ là demo test cố ý fail, không phải bug SUT.
 - **Hành động:** Cung cấp quy trình thao tác; không tự commit/push.
 
+## AI-019 - Xuất Excel test cases và test summary
+
+- **Thời điểm (UTC+07:00):** 2026-08-30 06:38
+- **Công cụ/mô hình:** Codex (GPT-5), spreadsheet artifact tool
+- **Mục đích:** Xuất workbook Excel theo yêu cầu HW06.
+- **Prompt nguyên văn:**
+
+```text
+xuất The Excel test cases and test summary.
+```
+
+- **Câu trả lời của AI:** Đã tạo `hw06/HW06_Test_Cases_and_Summary_22127315.xlsx`. Workbook có bốn sheet: Hướng dẫn; Test Cases (95 test case AI, nhãn audit và lý do đã có từ REPORT.md, dropdown audit/trạng thái chạy); Test Summary (công thức tổng hợp theo FR và nhóm hỗ trợ); Newman Pilot (kết quả run thật 15 request, 31 assertions, 29 pass, 2 fail). File được kiểm tra cấu trúc, công thức và hiển thị sheet summary. Tổng audit hiện tại: 95 test AI, 70 VALID, 4 INVALID, 21 INCOMPLETE; trạng thái thực thi trong Test Cases vẫn để Chưa chạy để không suy diễn pilot thành chạy toàn bộ.
+- **Kiểm tra của con người:** Mở workbook bằng Excel, cập nhật Trạng thái chạy/Kết quả thực tế/Bằng chứng cho từng test được thực thi, rồi kiểm tra các công thức Test Summary tự cập nhật.
+- **Hành động:** Xuất workbook Excel hoàn chỉnh trong thư mục nộp HW06.
+
+## AI-020 - Rút gọn Test Summary trong Excel
+
+- **Thời điểm (UTC+07:00):** 2026-08-30 06:38
+- **Công cụ/mô hình:** Codex (GPT-5), spreadsheet artifact tool
+- **Mục đích:** Xóa bảng bên dưới trong sheet Test Summary.
+- **Prompt nguyên văn:**
+
+```text
+trong test summary, bỏ bảng bên dưới
+```
+
+- **Câu trả lời của AI:** Đã xóa bảng thứ hai “Đã chạy / PASS / FAIL / BLOCKED / Bugs xác nhận” khỏi sheet `Test Summary`. Giữ nguyên bảng audit phía trên, sheet Test Cases, Newman Pilot và các sheet khác. Đã render/kiểm tra lại workbook sau khi sửa.
+- **Kiểm tra của con người:** Kiểm tra sheet Test Summary chỉ còn bảng thống kê audit theo FR và hàng tổng cộng.
+- **Hành động:** Cập nhật file Excel hiện có.
+
 ## Mẫu cho tương tác tiếp theo
 
 ## AI-XXX - _tên ngắn gọn_
